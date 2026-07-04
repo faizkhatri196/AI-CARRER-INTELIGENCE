@@ -53,6 +53,40 @@ class CareerAIEngine:
             temperature=0.2
         )
 
+    def _invoke_structured(self, prompt: ChatPromptTemplate, model_class, input_variables: dict):
+        import json
+        from pydantic import ValidationError
+        
+        # Extract fields from model_class (compatible with both Pydantic v1 and v2)
+        schema_fields = []
+        fields = getattr(model_class, "model_fields", getattr(model_class, "__fields__", {}))
+        for name, field in fields.items():
+            field_type = str(field.annotation).replace("list[str]", "list of strings").replace("<class 'str'>", "string").replace("<class 'int'>", "integer")
+            schema_fields.append(f"- {name} ({field_type}): {field.description}")
+            
+        format_instruction = (
+            f"\nYou MUST respond with ONLY a raw JSON object matching the following fields and descriptions:\n"
+            + "\n".join(schema_fields)
+            + "\n\nDo not wrap it in markdown code blocks. Do not add any conversational text or explanation. Return ONLY valid JSON."
+        )
+        
+        messages = prompt.format_messages(**input_variables)
+        messages[-1].content += format_instruction
+        
+        response = self.llm.invoke(messages)
+        content = response.content
+        start = content.find('{')
+        end = content.rfind('}')
+        if start != -1 and end != -1:
+            json_str = content[start:end+1]
+            try:
+                data = json.loads(json_str)
+                return model_class.model_validate(data)
+            except (json.JSONDecodeError, ValidationError) as e:
+                logger.error(f"Validation failed for {model_class.__name__}: {str(e)}. Raw content: {content}")
+                raise e
+        raise ValueError(f"No JSON object found in response for {model_class.__name__}. Raw content: {content}")
+
     def analyze_resume(self, resume_text: str) -> dict:
         # RAG Search over job market data
         matching_jobs = job_rag_retriever.retrieve_matching_jobs(resume_text, top_k=6)
@@ -72,8 +106,7 @@ class CareerAIEngine:
 
         prompt = ChatPromptTemplate.from_messages([
             ("system", "You are a Senior Technical Recruiter and Career Advisor in the AI/Tech domain. "
-                       "Your job is to analyze the candidate's resume and return structured data about it. "
-                       "You must output the results by invoking the tool/function. Do not output any other text."),
+                       "Your job is to analyze the candidate's resume and return structured data about it."),
             ("human", """
             Analyze the following resume deeply. Use the retrieved job market context and local scenarios to guide your scoring, level prediction, and salary prediction.
             
@@ -99,9 +132,7 @@ class CareerAIEngine:
             """)
         ])
         
-        structured_llm = self.llm.with_structured_output(ResumeAnalysis)
-        chain = prompt | structured_llm
-        parsed_result = chain.invoke({
+        parsed_result = self._invoke_structured(prompt, ResumeAnalysis, {
             "resume_text": resume_text,
             "jobs_context": jobs_context,
             "scenario_data": scenario_data,
@@ -123,8 +154,7 @@ class CareerAIEngine:
 
         prompt = ChatPromptTemplate.from_messages([
             ("system", "You are an expert Resume Critic and ATS Optimizer. "
-                       "Your job is to analyze the candidate's resume and return structured improvement suggestions. "
-                       "You must output the results by invoking the tool/function. Do not output any other text."),
+                       "Your job is to analyze the candidate's resume and return structured improvement suggestions."),
             ("human", """
             Analyze the following resume and recommend improvements specifically to align it with this target job market context.
             
@@ -138,19 +168,11 @@ class CareerAIEngine:
             {resume_text}
             ---
             
-            Provide structured suggestions on:
-            1. Formatting and Structure (overall organization, sections, length).
-            2. Impact and Quantifiable Results (making bullet points action-oriented, adding metrics/numbers).
-            3. ATS Compatibility (keywords, headers, formatting for scanners).
-            4. Skills (technical tools, languages, and methodologies needed for the matching jobs).
-            
             Provide a score (0-100) for each category, along with a list of actionable, clear recommendations.
             """)
         ])
         
-        structured_llm = self.llm.with_structured_output(ImprovementSuggestion)
-        chain = prompt | structured_llm
-        parsed_result = chain.invoke({
+        parsed_result = self._invoke_structured(prompt, ImprovementSuggestion, {
             "resume_text": resume_text,
             "jobs_context": jobs_context
         })
@@ -200,35 +222,20 @@ class CareerAIEngine:
     def get_dynamic_roadmap(self, current_skills: list[str], target_level: str) -> dict:
         prompt = ChatPromptTemplate.from_messages([
             ("system", "You are a career development specialist. "
-                       "Your job is to identify missing skills, match percentage, and list companies for the target level by invoking the tool. "
-                       "Do not output any other text."),
+                       "Your job is to identify missing skills, match percentage, and list companies for the target level."),
             ("human", """
             The candidate has the following current skills: {current_skills}
             They want to target the {target_level} job level.
             """)
         ])
         
-        structured_llm = self.llm.with_structured_output(RoadmapUpdate)
-        chain = prompt | structured_llm
-        parsed_result = chain.invoke({
+        parsed_result = self._invoke_structured(prompt, RoadmapUpdate, {
             "current_skills": ', '.join(current_skills),
             "target_level": target_level
         })
         return parsed_result.model_dump()
 
     def chat(self, query: str, context: str = "") -> str:
-        prompt_template = """
-        You are a senior AI career advisor and technical architect.
-        Use the following context about the user's resume and predicted profile to answer their question.
-        If the answer is not in the context, give general career advice based on their predicted level.
-        
-        Context:
-        {context}
-        
-        User Question: {query}
-        
-        Helpful Answer:"""
-        
         prompt = ChatPromptTemplate.from_messages([
             ("system", "You are a senior AI career advisor and technical architect. "
                        "Use the context about the user's resume and predicted profile to answer their question. "
