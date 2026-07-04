@@ -10,9 +10,16 @@ export default function Login({ onLogin }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
     setError('');
     
+    // Strict email format validation
+    const emailRegex = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/;
+    if (!emailRegex.test(formData.email)) {
+      setError('Please enter a valid email address (e.g. name@domain.com).');
+      return;
+    }
+    
+    setLoading(true);
     try {
       const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000';
       const endpoint = isRegister ? '/api/auth/register' : '/api/auth/login';
