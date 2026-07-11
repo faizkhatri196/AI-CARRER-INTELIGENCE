@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
+import { getApiUrl } from '../utils/api';
 import { 
   UploadCloud, CheckCircle, AlertCircle, Send, Loader2, TrendingUp, 
   BookOpen, BrainCircuit, Building2, Map, FileText, Clipboard, 
@@ -88,8 +89,7 @@ export default function Dashboard({ user }) {
   useEffect(() => {
     const fetchLatestProfile = async () => {
       try {
-        const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000';
-        const response = await axios.get(`${apiUrl}/api/profile/${user.user_id}`);
+        const response = await axios.get(getApiUrl(`/api/profile/${user.user_id}`));
         const prof = response.data;
         setProfile(prof);
         setTargetLevel(prof.predicted_level);
@@ -125,8 +125,7 @@ export default function Dashboard({ user }) {
     formData.append('user_id', user.user_id);
     
     try {
-      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000';
-      const response = await axios.post(`${apiUrl}/api/upload`, formData, {
+      const response = await axios.post(getApiUrl('/api/upload'), formData, {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
       const prof = response.data.profile;
@@ -164,8 +163,7 @@ I've populated recommendations, matching market postings, and a custom roadmap. 
     setChatLoading(true);
     
     try {
-      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000';
-      const response = await axios.post(`${apiUrl}/api/chat`, { 
+      const response = await axios.post(getApiUrl('/api/chat'), { 
         query: userMsg,
         user_id: user.user_id
       });
@@ -185,8 +183,7 @@ I've populated recommendations, matching market postings, and a custom roadmap. 
     setTargetLevel(level);
     setUpdatingRoadmap(true);
     try {
-      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000';
-      const response = await axios.post(`${apiUrl}/api/roadmap/update`, {
+      const response = await axios.post(getApiUrl('/api/roadmap/update'), {
         user_id: user.user_id,
         target_level: level
       });
@@ -207,8 +204,7 @@ I've populated recommendations, matching market postings, and a custom roadmap. 
   const fetchImprovements = async (targetRole = improveRole) => {
     setImproveLoading(true);
     try {
-      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000';
-      const response = await axios.post(`${apiUrl}/api/resume/improve`, {
+      const response = await axios.post(getApiUrl('/api/resume/improve'), {
         user_id: user.user_id,
         target_role: targetRole
       });
@@ -225,8 +221,7 @@ I've populated recommendations, matching market postings, and a custom roadmap. 
     if (!rewriteRole.trim()) return;
     setRewriteLoading(true);
     try {
-      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000';
-      const response = await axios.post(`${apiUrl}/api/resume/rewrite`, {
+      const response = await axios.post(getApiUrl('/api/resume/rewrite'), {
         user_id: user.user_id,
         target_role: rewriteRole
       });
@@ -262,9 +257,8 @@ I've populated recommendations, matching market postings, and a custom roadmap. 
   const handleDownloadPDF = async () => {
     if (!rewrittenResume) return;
     try {
-      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000';
       const filename = `${rewriteRole.toLowerCase().replace(/\s+/g, "_")}_resume`;
-      const response = await axios.post(`${apiUrl}/api/resume/download/pdf`, {
+      const response = await axios.post(getApiUrl('/api/resume/download/pdf'), {
         markdown: rewrittenResume,
         filename: filename
       }, {
@@ -286,9 +280,8 @@ I've populated recommendations, matching market postings, and a custom roadmap. 
   const handleDownloadDOCX = async () => {
     if (!rewrittenResume) return;
     try {
-      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000';
       const filename = `${rewriteRole.toLowerCase().replace(/\s+/g, "_")}_resume`;
-      const response = await axios.post(`${apiUrl}/api/resume/download/docx`, {
+      const response = await axios.post(getApiUrl('/api/resume/download/docx'), {
         markdown: rewrittenResume,
         filename: filename
       }, {

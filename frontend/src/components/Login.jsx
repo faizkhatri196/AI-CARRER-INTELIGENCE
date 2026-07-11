@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { User, Lock, Mail, ArrowRight } from 'lucide-react';
+import { getApiUrl } from '../utils/api';
 
 export default function Login({ onLogin }) {
   const [isRegister, setIsRegister] = useState(false);
@@ -21,10 +22,9 @@ export default function Login({ onLogin }) {
     
     setLoading(true);
     try {
-      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000';
       const endpoint = isRegister ? '/api/auth/register' : '/api/auth/login';
       const payload = isRegister ? formData : { email: formData.email, password: formData.password };
-      const response = await axios.post(`${apiUrl}${endpoint}`, payload);
+      const response = await axios.post(getApiUrl(endpoint), payload);
       onLogin(response.data);
     } catch (err) {
       setError(err.response?.data?.detail || 'An error occurred during authentication.');
