@@ -7,3 +7,4 @@ backend.log
 .DS_Store
 dist/
 build/
+backend/data/local_db.json

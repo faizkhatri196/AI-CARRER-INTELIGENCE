@@ -36,10 +36,144 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+import json
+import uuid
+import pymongo.errors
+from bson import ObjectId
+
+class FallbackInsertResult:
+    def __init__(self, inserted_id):
+        self.inserted_id = inserted_id
+
+class FallbackCollection:
+    def __init__(self, db_wrapper, name):
+        self.db_wrapper = db_wrapper
+        self.name = name
+
+    async def find_one(self, filter_query, sort=None):
+        if not self.db_wrapper.use_local:
+            try:
+                mongo_coll = self.db_wrapper.mongo_db[self.name]
+                if sort:
+                    res = await mongo_coll.find_one(filter_query, sort=sort)
+                else:
+                    res = await mongo_coll.find_one(filter_query)
+                return res
+            except Exception as e:
+                logger.error(f"MongoDB error on find_one for '{self.name}': {e}. Falling back to local storage.")
+                self.db_wrapper.use_local = True
+
+        return self.db_wrapper.local_find_one(self.name, filter_query, sort)
+
+    async def insert_one(self, document):
+        if not self.db_wrapper.use_local:
+            try:
+                mongo_coll = self.db_wrapper.mongo_db[self.name]
+                res = await mongo_coll.insert_one(document)
+                return res
+            except Exception as e:
+                logger.error(f"MongoDB error on insert_one for '{self.name}': {e}. Falling back to local storage.")
+                self.db_wrapper.use_local = True
+
+        return self.db_wrapper.local_insert_one(self.name, document)
+
+class FallbackDatabase:
+    def __init__(self, mongo_uri, db_name="ai_career_db"):
+        self.mongo_uri = mongo_uri
+        self.db_name = db_name
+        self.use_local = False
+        self.local_db_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "data", "local_db.json"))
+        
+        os.makedirs(os.path.dirname(self.local_db_path), exist_ok=True)
+        self._load_local_db()
+        
+        # Test connection/auth synchronously first to set use_local state immediately
+        try:
+            from pymongo import MongoClient
+            test_client = MongoClient(self.mongo_uri, serverSelectionTimeoutMS=1000, connectTimeoutMS=1000)
+            test_client.admin.command('ping')
+            test_client.close()
+            logger.info("Successfully connected and authenticated to MongoDB.")
+        except Exception as e:
+            logger.warning(f"MongoDB connection/auth check failed: {e}. Defaulting to local storage.")
+            self.use_local = True
+
+        try:
+            self.client = AsyncIOMotorClient(self.mongo_uri, serverSelectionTimeoutMS=2000)
+            self.mongo_db = self.client[self.db_name]
+        except Exception as e:
+            logger.error(f"Failed to initialize AsyncIOMotorClient: {e}. Defaulting to local storage.")
+            self.use_local = True
+
+        self.users = FallbackCollection(self, "users")
+        self.profiles = FallbackCollection(self, "profiles")
+        self.chats = FallbackCollection(self, "chats")
+
+    def _load_local_db(self):
+        if os.path.exists(self.local_db_path):
+            try:
+                with open(self.local_db_path, "r", encoding="utf-8") as f:
+                    self.local_data = json.load(f)
+            except Exception as e:
+                logger.error(f"Error loading local_db.json: {e}. Reinitializing database.")
+                self.local_data = {"users": [], "profiles": [], "chats": []}
+        else:
+            self.local_data = {"users": [], "profiles": [], "chats": []}
+            self._save_local_db()
+
+    def _save_local_db(self):
+        try:
+            with open(self.local_db_path, "w", encoding="utf-8") as f:
+                json.dump(self.local_data, f, indent=2, default=str)
+        except Exception as e:
+            logger.error(f"Failed to write local_db.json: {e}")
+
+    def local_find_one(self, collection_name, filter_query, sort=None):
+        self._load_local_db()
+        items = self.local_data.get(collection_name, [])
+        
+        matched_items = []
+        for item in items:
+            match = True
+            for k, v in filter_query.items():
+                if item.get(k) != v:
+                    match = False
+                    break
+            if match:
+                matched_items.append(item)
+                
+        if not matched_items:
+            return None
+            
+        if sort:
+            for field, order in reversed(sort):
+                reverse = True if order == -1 else False
+                matched_items.sort(key=lambda x: x.get(field) or "", reverse=reverse)
+                
+        return dict(matched_items[0])
+
+    def local_insert_one(self, collection_name, document):
+        self._load_local_db()
+        if collection_name not in self.local_data:
+            self.local_data[collection_name] = []
+            
+        if "_id" not in document:
+            document["_id"] = str(uuid.uuid4())
+            
+        doc_copy = {}
+        for k, v in document.items():
+            if isinstance(v, datetime):
+                doc_copy[k] = v.isoformat()
+            else:
+                doc_copy[k] = v
+                
+        self.local_data[collection_name].append(doc_copy)
+        self._save_local_db()
+        return FallbackInsertResult(document["_id"])
+
 # MongoDB Connection
-MONGO_URI = "mongodb+srv://iamrobotttt78_db_user:RtnJP2lmIssfWgv8@cluster0.i4juwbg.mongodb.net/"
-client = AsyncIOMotorClient(MONGO_URI)
-db = client.ai_career_db
+MONGO_URI = os.environ.get("MONGO_URI", "mongodb+srv://iamrobotttt78_db_user:RtnJP2lmIssfWgv8@cluster0.i4juwbg.mongodb.net/")
+db = FallbackDatabase(MONGO_URI)
 
 # Security Auth
 SECRET_KEY = "SUPER_SECRET_KEY_FOR_JWT"
