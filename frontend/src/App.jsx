@@ -1,60 +1,89 @@
 import React, { useState, useEffect } from 'react';
-import Dashboard from './components/Dashboard';
-import Login from './components/Login';
+import Navbar from './components/Navbar';
+import LandingPage from './components/LandingPage';
+import AuthModal from './components/AuthModal';
+import CandidateDashboard from './components/Candidate/CandidateDashboard';
+import RecruiterDashboard from './components/Recruiter/RecruiterDashboard';
 
 function App() {
   const [user, setUser] = useState(null);
+  const [mode, setMode] = useState('candidate'); // 'candidate' or 'recruiter'
+  const [authModal, setAuthModal] = useState({ isOpen: false, mode: 'login', role: 'candidate' });
 
   useEffect(() => {
-    // Check local storage for existing session
+    // Check local storage for persistent session
     const storedUser = localStorage.getItem('careerUser');
     if (storedUser) {
-      setUser(JSON.parse(storedUser));
+      try {
+        const parsed = JSON.parse(storedUser);
+        setUser(parsed);
+        if (parsed.role === 'recruiter') {
+          setMode('recruiter');
+        }
+      } catch (e) {
+        localStorage.removeItem('careerUser');
+      }
     }
   }, []);
 
-  const handleLogin = (userData) => {
+  const handleLoginSuccess = (userData) => {
     setUser(userData);
     localStorage.setItem('careerUser', JSON.stringify(userData));
+    if (userData.role === 'recruiter') {
+      setMode('recruiter');
+    } else {
+      setMode('candidate');
+    }
   };
 
   const handleLogout = () => {
     setUser(null);
     localStorage.removeItem('careerUser');
+    setMode('candidate');
+  };
+
+  const handleOpenAuth = (authMode, initialRole = 'candidate') => {
+    setAuthModal({ isOpen: true, mode: authMode, role: initialRole });
+  };
+
+  const handleSelectLandingExperience = (exp) => {
+    setMode(exp);
+    // If not logged in, prompt sign in or guest session
+    if (!user) {
+      handleOpenAuth('register', exp);
+    }
   };
 
   return (
-    <div className="min-h-screen bg-background text-gray-200">
-      <nav className="border-b border-gray-800 bg-surface/50 backdrop-blur-md sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-primary to-secondary flex items-center justify-center font-bold text-white shadow-lg shadow-primary/20">
-                AI
-              </div>
-              <span className="font-bold text-xl tracking-tight text-white">
-                Career Intelligence
-              </span>
-            </div>
-            
-            {user && (
-              <div className="flex items-center gap-4">
-                <span className="text-sm font-medium text-gray-300">Welcome, {user.name}</span>
-                <button 
-                  onClick={handleLogout}
-                  className="text-sm text-red-400 hover:text-red-300 bg-red-500/10 px-3 py-1.5 rounded-full border border-red-500/20 transition-colors"
-                >
-                  Logout
-                </button>
-              </div>
-            )}
-          </div>
-        </div>
-      </nav>
+    <div className="min-h-screen bg-[#070b14] text-gray-200 flex flex-col font-sans selection:bg-blue-500/30 selection:text-white">
+      <Navbar
+        user={user}
+        mode={mode}
+        onModeChange={(m) => setMode(m)}
+        onLogout={handleLogout}
+        onOpenAuth={(m) => handleOpenAuth(m, mode)}
+      />
 
-      <main>
-        {user ? <Dashboard user={user} /> : <Login onLogin={handleLogin} />}
+      <main className="flex-1">
+        {user ? (
+          mode === 'recruiter' ? (
+            <RecruiterDashboard user={user} />
+          ) : (
+            <CandidateDashboard user={user} />
+          )
+        ) : (
+          <LandingPage onSelectExperience={handleSelectLandingExperience} />
+        )}
       </main>
+
+      {/* Auth Modal */}
+      <AuthModal
+        isOpen={authModal.isOpen}
+        initialMode={authModal.mode}
+        initialRole={authModal.role}
+        onClose={() => setAuthModal({ ...authModal, isOpen: false })}
+        onSuccess={handleLoginSuccess}
+      />
     </div>
   );
 }

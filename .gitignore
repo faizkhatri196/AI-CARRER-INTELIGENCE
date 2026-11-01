@@ -8,3 +8,4 @@ backend.log
 dist/
 build/
 backend/data/local_db.json
+.vscode/

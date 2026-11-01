@@ -1,0 +1,105 @@
+{
+  "model_name": "CareerIntelligence-RF-V2",
+  "evaluated_at": "2026-11-01T12:45:37.908063",
+  "sample_size": 1200,
+  "train_size": 960,
+  "test_size": 240,
+  "metrics": {
+    "precision": 0.8182,
+    "recall": 0.6,
+    "f1_score": 0.6923,
+    "roc_auc": 0.9449,
+    "mean_absolute_error": 4.56,
+    "r2_score": 0.7942,
+    "ndcg_at_5": 0.6249,
+    "accuracy": 0.8667
+  },
+  "confusion_matrix": {
+    "true_negative": 172,
+    "false_positive": 8,
+    "false_negative": 24,
+    "true_positive": 36
+  },
+  "feature_importances": [
+    {
+      "feature": "total_experience_years",
+      "importance": 0.1679
+    },
+    {
+      "feature": "experience_requirement_ratio",
+      "importance": 0.1672
+    },
+    {
+      "feature": "required_skill_coverage",
+      "importance": 0.1616
+    },
+    {
+      "feature": "project_count",
+      "importance": 0.0795
+    },
+    {
+      "feature": "tfidf_similarity",
+      "importance": 0.0659
+    },
+    {
+      "feature": "preferred_skill_coverage",
+      "importance": 0.044
+    },
+    {
+      "feature": "action_verb_count",
+      "importance": 0.0384
+    },
+    {
+      "feature": "content_quality_score",
+      "importance": 0.0377
+    },
+    {
+      "feature": "project_with_metrics_ratio",
+      "importance": 0.0366
+    },
+    {
+      "feature": "inferred_skills_count",
+      "importance": 0.0364
+    },
+    {
+      "feature": "ats_formatting_score",
+      "importance": 0.0361
+    },
+    {
+      "feature": "evidence_density_score",
+      "importance": 0.0359
+    },
+    {
+      "feature": "domain_title_overlap",
+      "importance": 0.0346
+    },
+    {
+      "feature": "quantified_metric_count",
+      "importance": 0.0194
+    },
+    {
+      "feature": "transferable_skills_count",
+      "importance": 0.0159
+    },
+    {
+      "feature": "degree_level_code",
+      "importance": 0.0058
+    },
+    {
+      "feature": "has_contact_details",
+      "importance": 0.0049
+    },
+    {
+      "feature": "has_github",
+      "importance": 0.0046
+    },
+    {
+      "feature": "has_linkedin",
+      "importance": 0.0039
+    },
+    {
+      "feature": "cs_field_relevance",
+      "importance": 0.0039
+    }
+  ]
+}
