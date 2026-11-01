@@ -32,13 +32,13 @@ export default function LinkedInInspectorView({ profile }) {
 
   return (
     <div className="space-y-6">
-      <div className="p-6 rounded-2xl bg-[#0f172a] border border-gray-800">
+      <div className="p-4 sm:p-6 rounded-2xl bg-[#0f172a] border border-gray-800">
         <div className="flex items-center gap-3 mb-2">
-          <div className="w-9 h-9 rounded-xl bg-blue-600/10 border border-blue-500/20 flex items-center justify-center text-blue-400">
+          <div className="w-9 h-9 rounded-xl bg-blue-600/10 border border-blue-500/20 flex items-center justify-center text-blue-400 flex-shrink-0">
             <Sparkles className="w-5 h-5" />
           </div>
           <div>
-            <h3 className="text-lg font-bold text-white">LinkedIn Profile Intelligence</h3>
+            <h3 className="text-base sm:text-lg font-bold text-white">LinkedIn Profile Intelligence</h3>
             <p className="text-xs text-gray-400">
               Cross-references your LinkedIn profile against your resume to eliminate inconsistencies and maximize recruiter search indexing.
             </p>
@@ -63,7 +63,7 @@ export default function LinkedInInspectorView({ profile }) {
           <button
             type="submit"
             disabled={loading}
-            className="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs shadow-lg shadow-blue-500/20 flex items-center gap-2 transition-all disabled:opacity-50"
+            className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs shadow-lg shadow-blue-500/20 flex items-center justify-center gap-2 transition-all disabled:opacity-50 min-h-[44px]"
           >
             {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Sparkles className="w-4 h-4" />}
             <span>Compare LinkedIn with Resume</span>
@@ -72,9 +72,9 @@ export default function LinkedInInspectorView({ profile }) {
       </div>
 
       {analysis && (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 animate-in fade-in">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 animate-in fade-in">
           {/* Consistency Score Card */}
-          <div className="p-6 rounded-2xl bg-[#0f172a] border border-gray-800 flex flex-col justify-between">
+          <div className="p-4 sm:p-6 rounded-2xl bg-[#0f172a] border border-gray-800 flex flex-col justify-between">
             <div>
               <div className="flex items-center justify-between mb-4">
                 <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">Consistency Score</span>
@@ -82,14 +82,14 @@ export default function LinkedInInspectorView({ profile }) {
               </div>
 
               <h4 className="text-xs font-bold text-amber-400 flex items-center gap-1.5 mb-2">
-                <AlertTriangle className="w-4 h-4" /> Detected Inconsistencies & Gaps
+                <AlertTriangle className="w-4 h-4 flex-shrink-0" /> Detected Inconsistencies & Gaps
               </h4>
               <ul className="space-y-2 text-xs text-gray-300">
                 {analysis.discrepancies && analysis.discrepancies.length > 0 ? (
                   analysis.discrepancies.map((d, i) => (
                     <li key={i} className="flex items-start gap-1.5 bg-amber-500/5 p-2 rounded-lg border border-amber-500/10">
-                      <span className="text-amber-400">•</span>
-                      <span>{d}</span>
+                      <span className="text-amber-400 flex-shrink-0">•</span>
+                      <span className="break-words">{d}</span>
                     </li>
                   ))
                 ) : (
@@ -100,15 +100,15 @@ export default function LinkedInInspectorView({ profile }) {
           </div>
 
           {/* Positioning Recommendations */}
-          <div className="p-6 rounded-2xl bg-[#0f172a] border border-gray-800">
+          <div className="p-4 sm:p-6 rounded-2xl bg-[#0f172a] border border-gray-800">
             <h4 className="text-xs font-bold text-blue-400 flex items-center gap-1.5 mb-3">
-              <CheckCircle2 className="w-4 h-4" /> Executive Positioning Recommendations
+              <CheckCircle2 className="w-4 h-4 flex-shrink-0" /> Executive Positioning Recommendations
             </h4>
             <ul className="space-y-2.5 text-xs text-gray-300">
               {analysis.positioning_recommendations && analysis.positioning_recommendations.map((rec, i) => (
                 <li key={i} className="flex items-start gap-2 bg-gray-900/60 p-2.5 rounded-xl border border-gray-800">
-                  <span className="w-1.5 h-1.5 rounded-full bg-blue-400 mt-1.5" />
-                  <span>{rec}</span>
+                  <span className="w-1.5 h-1.5 rounded-full bg-blue-400 mt-1.5 flex-shrink-0" />
+                  <span className="break-words">{rec}</span>
                 </li>
               ))}
             </ul>
@@ -118,4 +118,3 @@ export default function LinkedInInspectorView({ profile }) {
     </div>
   );
 }
-

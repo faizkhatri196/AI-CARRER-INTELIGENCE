@@ -80,21 +80,22 @@ export default function BatchUploadModal({ isOpen, job, onClose, onBatchComplete
     : 0;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm animate-in fade-in">
-      <div className="w-full max-w-xl bg-[#0f172a] border border-gray-800 rounded-3xl p-6 sm:p-8 shadow-2xl relative">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/80 backdrop-blur-sm animate-in fade-in">
+      <div className="w-full max-w-xl bg-[#0f172a] border border-gray-800 rounded-3xl p-5 sm:p-8 shadow-2xl relative max-h-[92vh] overflow-y-auto">
         <button
           onClick={onClose}
-          className="absolute top-5 right-5 text-gray-400 hover:text-white p-1 rounded-lg hover:bg-gray-800 transition-colors"
+          className="absolute top-4 right-4 text-gray-400 hover:text-white p-2 rounded-xl hover:bg-gray-800 transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
+          aria-label="Close dialog"
         >
           <X className="w-5 h-5" />
         </button>
 
-        <div className="flex items-center gap-3 mb-4">
-          <div className="w-10 h-10 rounded-xl bg-indigo-600/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400">
+        <div className="flex items-center gap-3 mb-4 pr-8">
+          <div className="w-10 h-10 rounded-xl bg-indigo-600/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400 flex-shrink-0">
             <UploadCloud className="w-5 h-5" />
           </div>
           <div>
-            <h3 className="text-base font-bold text-white">Bulk Resume Ingestion Pipeline</h3>
+            <h3 className="text-sm sm:text-base font-bold text-white">Bulk Resume Ingestion Pipeline</h3>
             <p className="text-xs text-gray-400">
               Role: <strong className="text-white">{job?.title}</strong>
             </p>
@@ -104,17 +105,17 @@ export default function BatchUploadModal({ isOpen, job, onClose, onBatchComplete
         {error && (
           <div className="mb-4 p-3 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-xs flex items-center gap-2">
             <AlertTriangle className="w-4 h-4 flex-shrink-0" />
-            <span>{error}</span>
+            <span className="break-words">{error}</span>
           </div>
         )}
 
         {!batchId ? (
           <div className="space-y-4">
             {/* Drag & Drop Box */}
-            <label className="border-2 border-dashed border-gray-700 hover:border-indigo-500 rounded-2xl p-8 flex flex-col items-center justify-center cursor-pointer bg-gray-900/40 hover:bg-gray-900/80 transition-all text-center">
+            <label className="border-2 border-dashed border-gray-700 hover:border-indigo-500 rounded-2xl p-6 sm:p-8 flex flex-col items-center justify-center cursor-pointer bg-gray-900/40 hover:bg-gray-900/80 transition-all text-center">
               <UploadCloud className="w-10 h-10 text-indigo-400 mb-2" />
               <span className="text-xs font-bold text-white block">
-                {selectedFiles.length > 0 ? `${selectedFiles.length} files selected` : 'Drag and drop multiple resumes or click to browse'}
+                {selectedFiles.length > 0 ? `${selectedFiles.length} files selected` : 'Drag and drop multiple resumes or tap to browse'}
               </span>
               <span className="text-[11px] text-gray-400 mt-1">
                 Supported: PDF, DOCX, TXT • Up to 250 files per batch
@@ -132,7 +133,7 @@ export default function BatchUploadModal({ isOpen, job, onClose, onBatchComplete
               <div className="max-h-36 overflow-y-auto space-y-1 p-2 bg-gray-900 rounded-xl border border-gray-800 text-xs text-gray-300">
                 {selectedFiles.map((f, i) => (
                   <div key={i} className="flex items-center justify-between py-1 px-2">
-                    <span className="truncate max-w-[80%] font-mono text-[11px]">{f.name}</span>
+                    <span className="truncate max-w-[75%] font-mono text-[11px]">{f.name}</span>
                     <span className="text-[10px] text-gray-500">{(f.size / 1024).toFixed(0)} KB</span>
                   </div>
                 ))}
@@ -142,7 +143,7 @@ export default function BatchUploadModal({ isOpen, job, onClose, onBatchComplete
             <button
               onClick={handleStartIngestion}
               disabled={uploading || !selectedFiles.length}
-              className="w-full py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs shadow-md shadow-indigo-600/20 flex items-center justify-center gap-2 transition-all disabled:opacity-50"
+              className="w-full py-3 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs shadow-md shadow-indigo-600/20 flex items-center justify-center gap-2 transition-all disabled:opacity-50 min-h-[44px]"
             >
               {uploading ? (
                 <>
@@ -173,7 +174,7 @@ export default function BatchUploadModal({ isOpen, job, onClose, onBatchComplete
             </div>
 
             {/* Real stats breakdown */}
-            <div className="grid grid-cols-4 gap-2 text-center">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center">
               <div className="p-3 rounded-xl bg-gray-900 border border-gray-800">
                 <span className="text-[10px] text-gray-500 font-bold uppercase block">Received</span>
                 <span className="text-lg font-bold text-white">{batchStatus?.received || 0}</span>
@@ -196,7 +197,7 @@ export default function BatchUploadModal({ isOpen, job, onClose, onBatchComplete
               <div className="text-center pt-2">
                 <button
                   onClick={onClose}
-                  className="px-6 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs transition-colors"
+                  className="w-full sm:w-auto px-6 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs transition-colors min-h-[44px]"
                 >
                   View Ranked Candidate Pool
                 </button>
@@ -208,4 +209,3 @@ export default function BatchUploadModal({ isOpen, job, onClose, onBatchComplete
     </div>
   );
 }
-

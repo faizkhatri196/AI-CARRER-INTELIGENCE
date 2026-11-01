@@ -45,9 +45,9 @@ export default function CareerChatbotDrawer({ profile }) {
   };
 
   return (
-    <div className="p-6 rounded-2xl bg-[#0f172a] border border-gray-800 flex flex-col h-[600px]">
-      <div className="flex items-center gap-3 pb-4 mb-4 border-b border-gray-800">
-        <div className="w-8 h-8 rounded-lg bg-blue-600/10 border border-blue-500/20 flex items-center justify-center text-blue-400">
+    <div className="p-4 sm:p-6 rounded-2xl bg-[#0f172a] border border-gray-800 flex flex-col h-[500px] sm:h-[600px] max-h-[85vh]">
+      <div className="flex items-center gap-3 pb-3 sm:pb-4 mb-3 sm:mb-4 border-b border-gray-800">
+        <div className="w-8 h-8 rounded-lg bg-blue-600/10 border border-blue-500/20 flex items-center justify-center text-blue-400 flex-shrink-0">
           <MessageSquare className="w-4 h-4" />
         </div>
         <div>
@@ -59,11 +59,11 @@ export default function CareerChatbotDrawer({ profile }) {
       </div>
 
       {/* Messages Scroll Area */}
-      <div className="flex-1 overflow-y-auto space-y-3.5 pr-2">
+      <div className="flex-1 overflow-y-auto space-y-3 pr-1 sm:pr-2">
         {messages.map((m, idx) => (
           <div
             key={idx}
-            className={`flex items-start gap-2.5 text-xs ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}
+            className={`flex items-start gap-2 text-xs ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}
           >
             {m.role === 'assistant' && (
               <div className="w-7 h-7 rounded-lg bg-blue-600 flex items-center justify-center text-white flex-shrink-0 mt-0.5">
@@ -71,7 +71,7 @@ export default function CareerChatbotDrawer({ profile }) {
               </div>
             )}
             <div
-              className={`p-3.5 rounded-2xl max-w-[80%] leading-relaxed ${
+              className={`p-3 sm:p-3.5 rounded-2xl max-w-[85%] sm:max-w-[80%] leading-relaxed break-words ${
                 m.role === 'user'
                   ? 'bg-blue-600 text-white rounded-br-sm'
                   : 'bg-gray-900 border border-gray-800 text-gray-200 rounded-bl-sm whitespace-pre-wrap'
@@ -106,7 +106,7 @@ export default function CareerChatbotDrawer({ profile }) {
           <button
             key={i}
             onClick={() => setInput(prompt)}
-            className="text-[10px] text-gray-400 hover:text-white bg-gray-900 border border-gray-800 hover:border-blue-500/50 px-2.5 py-1 rounded-full transition-colors"
+            className="text-[10px] text-gray-400 hover:text-white bg-gray-900 border border-gray-800 hover:border-blue-500/50 px-2.5 py-1 rounded-full transition-colors min-h-[28px]"
           >
             {prompt}
           </button>
@@ -120,12 +120,12 @@ export default function CareerChatbotDrawer({ profile }) {
           value={input}
           onChange={(e) => setInput(e.target.value)}
           placeholder="Ask your AI Career Advisor..."
-          className="flex-1 px-4 py-2 rounded-xl bg-gray-900 border border-gray-700 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-blue-500"
+          className="flex-1 px-3.5 sm:px-4 py-2.5 rounded-xl bg-gray-900 border border-gray-700 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 min-h-[44px]"
         />
         <button
           type="submit"
           disabled={loading || !input.trim()}
-          className="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white flex items-center justify-center transition-all disabled:opacity-50"
+          className="px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white flex items-center justify-center transition-all disabled:opacity-50 min-h-[44px] min-w-[44px]"
         >
           <Send className="w-4 h-4" />
         </button>
@@ -133,4 +133,3 @@ export default function CareerChatbotDrawer({ profile }) {
     </div>
   );
 }
-

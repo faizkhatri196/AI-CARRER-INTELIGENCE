@@ -14,7 +14,7 @@ function CircularScoreBadge({ score, size = 110, strokeWidth = 9 }) {
   if (score < 45) strokeColor = "stroke-rose-500";
   
   return (
-    <div className="relative flex items-center justify-center" style={{ width: size, height: size }}>
+    <div className="relative flex items-center justify-center flex-shrink-0" style={{ width: size, height: size }}>
       <svg className="transform -rotate-90" width={size} height={size}>
         <circle
           className="stroke-gray-800"
@@ -37,8 +37,8 @@ function CircularScoreBadge({ score, size = 110, strokeWidth = 9 }) {
         />
       </svg>
       <div className="absolute text-center">
-        <span className="text-3xl font-extrabold text-white tracking-tight">{score}</span>
-        <span className="text-[10px] text-gray-400 block font-bold uppercase tracking-wider">/ 100</span>
+        <span className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">{score}</span>
+        <span className="text-[9px] sm:text-[10px] text-gray-400 block font-bold uppercase tracking-wider">/ 100</span>
       </div>
     </div>
   );
@@ -67,8 +67,8 @@ export default function AssessmentScorecard({ profile }) {
   return (
     <div className="space-y-6">
       {/* 4 High-Level Metric Cards */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="p-5 rounded-2xl bg-[#0f172a] border border-gray-800 relative overflow-hidden">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+        <div className="p-4 sm:p-5 rounded-2xl bg-[#0f172a] border border-gray-800 relative overflow-hidden">
           <div className="flex items-center justify-between mb-2">
             <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Overall Fit</span>
             <Target className="w-4 h-4 text-blue-400" />
@@ -80,7 +80,7 @@ export default function AssessmentScorecard({ profile }) {
           <span className="text-[11px] text-gray-400 block mt-1">Multi-dimensional rating</span>
         </div>
 
-        <div className="p-5 rounded-2xl bg-[#0f172a] border border-gray-800 relative overflow-hidden">
+        <div className="p-4 sm:p-5 rounded-2xl bg-[#0f172a] border border-gray-800 relative overflow-hidden">
           <div className="flex items-center justify-between mb-2">
             <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider">ATS Readability</span>
             <ShieldCheck className="w-4 h-4 text-emerald-400" />
@@ -92,7 +92,7 @@ export default function AssessmentScorecard({ profile }) {
           <span className="text-[11px] text-gray-400 block mt-1">Structural parser parsing</span>
         </div>
 
-        <div className="p-5 rounded-2xl bg-[#0f172a] border border-gray-800 relative overflow-hidden">
+        <div className="p-4 sm:p-5 rounded-2xl bg-[#0f172a] border border-gray-800 relative overflow-hidden">
           <div className="flex items-center justify-between mb-2">
             <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Market Readiness</span>
             <TrendingUp className="w-4 h-4 text-indigo-400" />
@@ -103,7 +103,7 @@ export default function AssessmentScorecard({ profile }) {
           <span className="text-[11px] text-gray-400 block mt-1">Matching 2,000 active postings</span>
         </div>
 
-        <div className="p-5 rounded-2xl bg-[#0f172a] border border-gray-800 relative overflow-hidden">
+        <div className="p-4 sm:p-5 rounded-2xl bg-[#0f172a] border border-gray-800 relative overflow-hidden">
           <div className="flex items-center justify-between mb-2">
             <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Estimated Package</span>
             <Award className="w-4 h-4 text-purple-400" />
@@ -119,9 +119,9 @@ export default function AssessmentScorecard({ profile }) {
       {/* Main Breakdown Section */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Left: Radial Score & Profile Summary */}
-        <div className="p-6 rounded-2xl bg-[#0f172a] border border-gray-800 flex flex-col items-center justify-center text-center">
-          <CircularScoreBadge score={score} size={130} />
-          <h3 className="text-lg font-bold text-white mt-4">
+        <div className="p-5 sm:p-6 rounded-2xl bg-[#0f172a] border border-gray-800 flex flex-col items-center justify-center text-center">
+          <CircularScoreBadge score={score} size={120} />
+          <h3 className="text-base sm:text-lg font-bold text-white mt-4 break-words">
             {profile.recommended_role || 'Software Engineer'}
           </h3>
           <span className="inline-block mt-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-500/10 text-blue-400 border border-blue-500/20">
@@ -145,13 +145,13 @@ export default function AssessmentScorecard({ profile }) {
         </div>
 
         {/* Right: 8-Dimension Explainable Category Breakdown */}
-        <div className="lg:col-span-2 p-6 rounded-2xl bg-[#0f172a] border border-gray-800">
-          <div className="flex items-center justify-between mb-4">
+        <div className="lg:col-span-2 p-5 sm:p-6 rounded-2xl bg-[#0f172a] border border-gray-800">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
             <div>
-              <h4 className="text-base font-bold text-white">Multidimensional Scoring Breakdown</h4>
+              <h4 className="text-sm sm:text-base font-bold text-white">Multidimensional Scoring Breakdown</h4>
               <p className="text-xs text-gray-400">Transparent point breakdown across 8 independent evaluation criteria</p>
             </div>
-            <span className="text-xs font-semibold text-gray-400 bg-gray-800 px-2.5 py-1 rounded-lg">
+            <span className="text-xs font-semibold text-gray-400 bg-gray-800 px-2.5 py-1 rounded-lg self-start sm:self-auto">
               Total = 100 pts
             </span>
           </div>
@@ -176,31 +176,31 @@ export default function AssessmentScorecard({ profile }) {
       </div>
 
       {/* Strengths & Missing Gaps Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="p-6 rounded-2xl bg-[#0f172a] border border-gray-800">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+        <div className="p-5 sm:p-6 rounded-2xl bg-[#0f172a] border border-gray-800">
           <div className="flex items-center gap-2 mb-4 text-emerald-400">
-            <CheckCircle className="w-5 h-5" />
+            <CheckCircle className="w-5 h-5 flex-shrink-0" />
             <h4 className="font-bold text-white text-sm">Verified Candidate Strengths</h4>
           </div>
           <div className="space-y-2.5 text-xs text-gray-300">
             {profile.skills && profile.skills.slice(0, 5).map((skill, i) => (
               <div key={i} className="flex items-center gap-2 bg-emerald-500/5 border border-emerald-500/10 p-2.5 rounded-xl">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 flex-shrink-0" />
                 <span className="font-medium text-emerald-200">Demonstrated proficiency in {skill}</span>
               </div>
             ))}
             {profile.inferred_skills && profile.inferred_skills[0] && (
               <div className="flex items-center gap-2 bg-blue-500/5 border border-blue-500/10 p-2.5 rounded-xl">
-                <span className="w-1.5 h-1.5 rounded-full bg-blue-400" />
+                <span className="w-1.5 h-1.5 rounded-full bg-blue-400 flex-shrink-0" />
                 <span className="font-medium text-blue-200">{profile.inferred_skills[0].skill} verified via project evidence</span>
               </div>
             )}
           </div>
         </div>
 
-        <div className="p-6 rounded-2xl bg-[#0f172a] border border-gray-800">
+        <div className="p-5 sm:p-6 rounded-2xl bg-[#0f172a] border border-gray-800">
           <div className="flex items-center gap-2 mb-4 text-amber-400">
-            <AlertTriangle className="w-5 h-5" />
+            <AlertTriangle className="w-5 h-5 flex-shrink-0" />
             <h4 className="font-bold text-white text-sm">Critical Missing Market Requirements</h4>
           </div>
           <div className="space-y-2.5 text-xs text-gray-300">
@@ -208,10 +208,10 @@ export default function AssessmentScorecard({ profile }) {
               profile.missing_skills.slice(0, 5).map((skill, i) => (
                 <div key={i} className="flex items-center justify-between bg-amber-500/5 border border-amber-500/10 p-2.5 rounded-xl">
                   <div className="flex items-center gap-2">
-                    <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
+                    <span className="w-1.5 h-1.5 rounded-full bg-amber-400 flex-shrink-0" />
                     <span className="font-medium text-amber-200">{skill}</span>
                   </div>
-                  <span className="text-[10px] text-gray-400 font-semibold bg-gray-800 px-2 py-0.5 rounded">High Market Demand</span>
+                  <span className="text-[10px] text-gray-400 font-semibold bg-gray-800 px-2 py-0.5 rounded">High Demand</span>
                 </div>
               ))
             ) : (
@@ -223,4 +223,3 @@ export default function AssessmentScorecard({ profile }) {
     </div>
   );
 }
-

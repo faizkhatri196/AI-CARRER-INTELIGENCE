@@ -48,54 +48,54 @@ export default function RecruiterAnalyticsView({ jobId }) {
   return (
     <div className="space-y-6">
       {/* 5 KPI Stat Cards */}
-      <div className="grid grid-cols-2 lg:grid-cols-5 gap-3">
-        <div className="p-4 rounded-2xl bg-[#0f172a] border border-gray-800">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2.5 sm:gap-3">
+        <div className="p-3.5 sm:p-4 rounded-2xl bg-[#0f172a] border border-gray-800">
           <span className="text-[10px] font-bold uppercase tracking-wider text-gray-400 block mb-1">Total Ingested</span>
-          <span className="text-2xl font-extrabold text-white">{analytics.total_applications}</span>
-          <span className="text-[11px] text-gray-500 block mt-0.5">Resumes</span>
+          <span className="text-xl sm:text-2xl font-extrabold text-white">{analytics.total_applications}</span>
+          <span className="text-[10px] sm:text-[11px] text-gray-500 block mt-0.5">Resumes</span>
         </div>
 
-        <div className="p-4 rounded-2xl bg-[#0f172a] border border-gray-800">
+        <div className="p-3.5 sm:p-4 rounded-2xl bg-[#0f172a] border border-gray-800">
           <span className="text-[10px] font-bold uppercase tracking-wider text-indigo-400 block mb-1">Average Fit</span>
-          <span className="text-2xl font-extrabold text-white">{analytics.average_fit_score}</span>
-          <span className="text-[11px] text-gray-500 block mt-0.5">/ 100 benchmark</span>
+          <span className="text-xl sm:text-2xl font-extrabold text-white">{analytics.average_fit_score}</span>
+          <span className="text-[10px] sm:text-[11px] text-gray-500 block mt-0.5">/ 100 benchmark</span>
         </div>
 
-        <div className="p-4 rounded-2xl bg-[#0f172a] border border-gray-800">
+        <div className="p-3.5 sm:p-4 rounded-2xl bg-[#0f172a] border border-gray-800">
           <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-400 block mb-1">Strong Matches</span>
-          <span className="text-2xl font-extrabold text-emerald-400">{analytics.strong_matches}</span>
-          <span className="text-[11px] text-gray-500 block mt-0.5">Score ≥ 82</span>
+          <span className="text-xl sm:text-2xl font-extrabold text-emerald-400">{analytics.strong_matches}</span>
+          <span className="text-[10px] sm:text-[11px] text-gray-500 block mt-0.5">Score ≥ 82</span>
         </div>
 
-        <div className="p-4 rounded-2xl bg-[#0f172a] border border-gray-800">
+        <div className="p-3.5 sm:p-4 rounded-2xl bg-[#0f172a] border border-gray-800">
           <span className="text-[10px] font-bold uppercase tracking-wider text-amber-400 block mb-1">Shortlisted</span>
-          <span className="text-2xl font-extrabold text-amber-400">{analytics.shortlisted_count}</span>
-          <span className="text-[11px] text-gray-500 block mt-0.5">Approved candidates</span>
+          <span className="text-xl sm:text-2xl font-extrabold text-amber-400">{analytics.shortlisted_count}</span>
+          <span className="text-[10px] sm:text-[11px] text-gray-500 block mt-0.5">Approved candidates</span>
         </div>
 
-        <div className="p-4 rounded-2xl bg-[#0f172a] border border-gray-800">
-          <span className="text-[10px] font-bold uppercase tracking-wider text-gray-400 block mb-1">Duplicate Rate</span>
-          <span className="text-2xl font-extrabold text-white">{analytics.duplicate_resumes}</span>
-          <span className="text-[11px] text-gray-500 block mt-0.5">Deduplicated (SHA-256)</span>
+        <div className="p-3.5 sm:p-4 rounded-2xl bg-[#0f172a] border border-gray-800 col-span-2 sm:col-span-1">
+          <span className="text-[10px] font-bold uppercase tracking-wider text-gray-400 block mb-1">Duplicates</span>
+          <span className="text-xl sm:text-2xl font-extrabold text-white">{analytics.duplicate_resumes}</span>
+          <span className="text-[10px] sm:text-[11px] text-gray-500 block mt-0.5">Deduplicated (SHA-256)</span>
         </div>
       </div>
 
       {/* Recharts Graphs */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
         {/* Score Distribution */}
-        <div className="p-6 rounded-2xl bg-[#0f172a] border border-gray-800">
+        <div className="p-4 sm:p-6 rounded-2xl bg-[#0f172a] border border-gray-800">
           <div className="flex items-center justify-between mb-4">
             <h4 className="text-xs font-bold uppercase tracking-wider text-gray-300">Candidate Score Distribution</h4>
             <span className="text-xs text-indigo-400 font-semibold">Normalized Histogram</span>
           </div>
-          <div className="h-64 w-full">
+          <div className="h-56 sm:h-64 w-full">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={scoreData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+              <BarChart data={scoreData} margin={{ top: 10, right: 10, left: -25, bottom: 0 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#1f293d" vertical={false} />
-                <XAxis dataKey="range" stroke="#64748b" tick={{ fontSize: 11 }} />
-                <YAxis stroke="#64748b" tick={{ fontSize: 11 }} allowDecimals={false} />
+                <XAxis dataKey="range" stroke="#64748b" tick={{ fontSize: 10 }} />
+                <YAxis stroke="#64748b" tick={{ fontSize: 10 }} allowDecimals={false} />
                 <Tooltip
-                  contentStyle={{ backgroundColor: '#0f172a', borderColor: '#334155', borderRadius: '12px', fontSize: '12px' }}
+                  contentStyle={{ backgroundColor: '#0f172a', borderColor: '#334155', borderRadius: '12px', fontSize: '11px' }}
                 />
                 <Bar dataKey="count" fill="#6366f1" radius={[6, 6, 0, 0]} />
               </BarChart>
@@ -104,19 +104,19 @@ export default function RecruiterAnalyticsView({ jobId }) {
         </div>
 
         {/* Experience Distribution */}
-        <div className="p-6 rounded-2xl bg-[#0f172a] border border-gray-800">
+        <div className="p-4 sm:p-6 rounded-2xl bg-[#0f172a] border border-gray-800">
           <div className="flex items-center justify-between mb-4">
             <h4 className="text-xs font-bold uppercase tracking-wider text-gray-300">Experience Demographics</h4>
             <span className="text-xs text-emerald-400 font-semibold">Verified Durations</span>
           </div>
-          <div className="h-64 w-full">
+          <div className="h-56 sm:h-64 w-full">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={expData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+              <BarChart data={expData} margin={{ top: 10, right: 10, left: -25, bottom: 0 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#1f293d" vertical={false} />
-                <XAxis dataKey="label" stroke="#64748b" tick={{ fontSize: 11 }} />
-                <YAxis stroke="#64748b" tick={{ fontSize: 11 }} allowDecimals={false} />
+                <XAxis dataKey="label" stroke="#64748b" tick={{ fontSize: 10 }} />
+                <YAxis stroke="#64748b" tick={{ fontSize: 10 }} allowDecimals={false} />
                 <Tooltip
-                  contentStyle={{ backgroundColor: '#0f172a', borderColor: '#334155', borderRadius: '12px', fontSize: '12px' }}
+                  contentStyle={{ backgroundColor: '#0f172a', borderColor: '#334155', borderRadius: '12px', fontSize: '11px' }}
                 />
                 <Bar dataKey="count" fill="#10b981" radius={[6, 6, 0, 0]} />
               </BarChart>
@@ -126,7 +126,7 @@ export default function RecruiterAnalyticsView({ jobId }) {
       </div>
 
       {/* Top Skills Cloud */}
-      <div className="p-6 rounded-2xl bg-[#0f172a] border border-gray-800">
+      <div className="p-4 sm:p-6 rounded-2xl bg-[#0f172a] border border-gray-800">
         <h4 className="text-xs font-bold uppercase tracking-wider text-gray-300 mb-3">Top Capabilities in Applicant Pool</h4>
         <div className="flex flex-wrap gap-2">
           {analytics.top_skills_pool && analytics.top_skills_pool.map((s, idx) => (
@@ -142,4 +142,3 @@ export default function RecruiterAnalyticsView({ jobId }) {
     </div>
   );
 }
-

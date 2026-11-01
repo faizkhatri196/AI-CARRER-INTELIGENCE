@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
-import axios from 'axios';
-import { getApiUrl } from '../../utils/api';
 import { 
   Star, Search, Filter, ShieldCheck, Eye, 
   ArrowUpDown, Download, CheckSquare, Square, 
-  Sparkles, Layers, Sliders, ChevronDown
+  Sparkles, Layers, Sliders, ChevronDown, Award
 } from 'lucide-react';
 
 export default function CandidateRankingTable({ 
@@ -15,7 +13,7 @@ export default function CandidateRankingTable({
   onSelectCandidate, 
   onToggleShortlist, 
   onOpenCompare,
-  selectedCompareIds,
+  selectedCompareIds = [],
   onToggleCompareSelect,
   onExportCsv,
   onExportPdf
@@ -64,17 +62,17 @@ export default function CandidateRankingTable({
   return (
     <div className="space-y-4">
       {/* Control & Filter Toolbar */}
-      <div className="p-4 rounded-2xl bg-[#0f172a] border border-gray-800 space-y-3">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
+      <div className="p-4 sm:p-5 rounded-2xl bg-[#0f172a] border border-gray-800 space-y-3.5">
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
           {/* Search */}
-          <div className="relative flex-1 max-w-md">
+          <div className="relative flex-1 w-full lg:max-w-md">
             <Search className="w-4 h-4 text-gray-400 absolute left-3.5 top-3" />
             <input
               type="text"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               placeholder="Search by name, skill, or keyword..."
-              className="w-full pl-10 pr-4 py-2 rounded-xl bg-gray-900 border border-gray-700 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-indigo-500"
+              className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-gray-900 border border-gray-700 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-indigo-500 min-h-[44px]"
             />
           </div>
 
@@ -83,7 +81,7 @@ export default function CandidateRankingTable({
             {/* Anonymized Screening Toggle */}
             <button
               onClick={onToggleAnonymize}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-xs font-semibold transition-all ${
+              className={`flex items-center gap-1.5 px-3 py-2 rounded-xl border text-xs font-semibold transition-all min-h-[40px] ${
                 anonymize
                   ? 'bg-emerald-500/10 border-emerald-500 text-emerald-400 shadow-sm'
                   : 'bg-gray-900 border-gray-700 text-gray-400 hover:text-white'
@@ -98,7 +96,7 @@ export default function CandidateRankingTable({
             <button
               onClick={onOpenCompare}
               disabled={selectedCompareIds.length < 2}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-gray-700 bg-gray-900 text-xs text-gray-300 hover:text-white hover:border-gray-600 disabled:opacity-40 transition-colors"
+              className="flex items-center gap-1.5 px-3 py-2 rounded-xl border border-gray-700 bg-gray-900 text-xs text-gray-300 hover:text-white hover:border-gray-600 disabled:opacity-40 transition-colors min-h-[40px]"
             >
               <Layers className="w-4 h-4 text-indigo-400" />
               <span>Compare ({selectedCompareIds.length})</span>
@@ -107,7 +105,7 @@ export default function CandidateRankingTable({
             {/* Export Buttons */}
             <button
               onClick={onExportCsv}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-gray-700 bg-gray-900 text-xs text-gray-300 hover:text-white hover:border-gray-600 transition-colors"
+              className="flex items-center gap-1.5 px-3 py-2 rounded-xl border border-gray-700 bg-gray-900 text-xs text-gray-300 hover:text-white hover:border-gray-600 transition-colors min-h-[40px]"
             >
               <Download className="w-3.5 h-3.5 text-gray-400" />
               <span>CSV</span>
@@ -115,7 +113,7 @@ export default function CandidateRankingTable({
 
             <button
               onClick={onExportPdf}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-gray-700 bg-gray-900 text-xs text-gray-300 hover:text-white hover:border-gray-600 transition-colors"
+              className="flex items-center gap-1.5 px-3 py-2 rounded-xl border border-gray-700 bg-gray-900 text-xs text-gray-300 hover:text-white hover:border-gray-600 transition-colors min-h-[40px]"
             >
               <Download className="w-3.5 h-3.5 text-indigo-400" />
               <span>Report PDF</span>
@@ -124,7 +122,7 @@ export default function CandidateRankingTable({
         </div>
 
         {/* Filter Sliders & Dropdowns */}
-        <div className="flex flex-wrap items-center gap-4 pt-2 border-t border-gray-800/80 text-xs text-gray-300">
+        <div className="flex flex-wrap items-center gap-4 pt-3 border-t border-gray-800/80 text-xs text-gray-300">
           <div className="flex items-center gap-2">
             <span className="text-gray-400">Min Score:</span>
             <input
@@ -144,7 +142,7 @@ export default function CandidateRankingTable({
             <select
               value={recommendationFilter}
               onChange={(e) => setRecommendationFilter(e.target.value)}
-              className="bg-gray-900 border border-gray-700 rounded-lg px-2.5 py-1 text-xs text-white"
+              className="bg-gray-900 border border-gray-700 rounded-lg px-2.5 py-1.5 text-xs text-white"
             >
               <option value="all">All Tiers</option>
               <option value="Strong Match">Strong Match</option>
@@ -154,22 +152,111 @@ export default function CandidateRankingTable({
             </select>
           </div>
 
-          <label className="flex items-center gap-2 cursor-pointer">
+          <label className="flex items-center gap-2 cursor-pointer select-none">
             <input
               type="checkbox"
               checked={shortlistOnly}
               onChange={(e) => setShortlistOnly(e.target.checked)}
-              className="rounded accent-indigo-500"
+              className="rounded accent-indigo-500 w-4 h-4"
             />
             <span className="text-gray-300 font-medium">Shortlisted Only</span>
           </label>
         </div>
       </div>
 
-      {/* Table Container */}
-      <div className="rounded-2xl bg-[#0f172a] border border-gray-800 overflow-hidden shadow-xl">
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs">
+      {/* MOBILE CARD VIEW (< 768px): Fully engineered responsive representation */}
+      <div className="block md:hidden space-y-3">
+        {filtered.length > 0 ? (
+          filtered.map((c, idx) => {
+            const isChecked = selectedCompareIds.includes(c.candidate_id);
+            return (
+              <div
+                key={c.candidate_id || idx}
+                onClick={() => onSelectCandidate(c)}
+                className="p-4 rounded-2xl bg-[#0f172a] border border-gray-800 hover:border-indigo-500/40 transition-all cursor-pointer space-y-3"
+              >
+                {/* Header row: Rank, Name, Score, Star */}
+                <div className="flex items-start justify-between gap-2">
+                  <div className="flex items-start gap-2.5">
+                    <span className="text-xs font-extrabold text-indigo-400 bg-indigo-500/10 px-2 py-0.5 rounded-md border border-indigo-500/20">
+                      #{idx + 1}
+                    </span>
+                    <div>
+                      <h4 className="text-sm font-bold text-white leading-tight">{c.name}</h4>
+                      <span className="text-[11px] text-gray-500 block truncate max-w-[180px]">{c.email}</span>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-2" onClick={(e) => e.stopPropagation()}>
+                    <span className={`px-2.5 py-1 rounded-full text-xs font-extrabold border ${getScoreBadgeColor(c.overall_fit_score)}`}>
+                      {c.overall_fit_score}/100
+                    </span>
+                    <button
+                      onClick={() => onToggleShortlist(c.candidate_id)}
+                      className={`p-2 rounded-lg transition-colors min-h-[36px] min-w-[36px] flex items-center justify-center ${
+                        c.shortlisted
+                          ? 'text-amber-400 bg-amber-500/10'
+                          : 'text-gray-500 hover:text-amber-400 hover:bg-gray-800'
+                      }`}
+                    >
+                      <Star className={`w-4 h-4 ${c.shortlisted ? 'fill-amber-400' : ''}`} />
+                    </button>
+                  </div>
+                </div>
+
+                {/* Sub details: Experience & Tier */}
+                <div className="flex items-center justify-between text-xs text-gray-400 border-t border-gray-800/60 pt-2">
+                  <span>Experience: <strong className="text-white">{c.experience_years} yrs</strong></span>
+                  <span className="text-indigo-300 font-semibold">{c.recommendation}</span>
+                </div>
+
+                {/* Skills tags */}
+                <div className="flex flex-wrap gap-1">
+                  {c.skills && c.skills.slice(0, 4).map((s, sIdx) => (
+                    <span key={sIdx} className="bg-gray-900 border border-gray-800 text-gray-300 text-[10px] px-2 py-0.5 rounded font-mono">
+                      {s}
+                    </span>
+                  ))}
+                  {c.skills && c.skills.length > 4 && (
+                    <span className="text-[10px] text-gray-500 self-center">+{c.skills.length - 4} more</span>
+                  )}
+                </div>
+
+                {/* Actions bottom row: Compare checkbox + View button */}
+                <div 
+                  className="flex items-center justify-between pt-2 border-t border-gray-800/60"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <button
+                    onClick={() => onToggleCompareSelect(c.candidate_id)}
+                    className="flex items-center gap-1.5 text-xs text-gray-400 hover:text-indigo-400 py-1"
+                  >
+                    {isChecked ? <CheckSquare className="w-4 h-4 text-indigo-500" /> : <Square className="w-4 h-4" />}
+                    <span>Select to Compare</span>
+                  </button>
+
+                  <button
+                    onClick={() => onSelectCandidate(c)}
+                    className="flex items-center gap-1 text-xs font-semibold text-indigo-400 hover:text-indigo-300 py-1"
+                  >
+                    <Eye className="w-3.5 h-3.5" />
+                    <span>View Dossier</span>
+                  </button>
+                </div>
+              </div>
+            );
+          })
+        ) : (
+          <div className="p-8 text-center text-gray-500 text-xs bg-[#0f172a] rounded-2xl border border-gray-800">
+            No candidates match your current filter criteria.
+          </div>
+        )}
+      </div>
+
+      {/* DESKTOP / TABLET TABLE VIEW (>= 768px): Contained horizontal scroll */}
+      <div className="hidden md:block rounded-2xl bg-[#0f172a] border border-gray-800 overflow-hidden shadow-xl">
+        <div className="overflow-x-auto max-w-full">
+          <table className="w-full text-left text-xs min-w-[700px]">
             <thead className="bg-gray-900/90 border-b border-gray-800 text-gray-400 font-semibold uppercase tracking-wider text-[10px]">
               <tr>
                 <th className="py-3 px-4 w-12 text-center">Compare</th>
@@ -286,4 +373,3 @@ export default function CandidateRankingTable({
     </div>
   );
 }
-

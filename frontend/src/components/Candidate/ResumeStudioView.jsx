@@ -106,32 +106,32 @@ export default function ResumeStudioView({ profile }) {
   return (
     <div className="space-y-6">
       {/* Studio Header & Template Picker */}
-      <div className="p-6 rounded-2xl bg-[#0f172a] border border-gray-800 space-y-4">
+      <div className="p-4 sm:p-6 rounded-2xl bg-[#0f172a] border border-gray-800 space-y-4">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-blue-600/10 border border-blue-500/20 flex items-center justify-center text-blue-400">
+            <div className="w-9 h-9 rounded-xl bg-blue-600/10 border border-blue-500/20 flex items-center justify-center text-blue-400 flex-shrink-0">
               <Sparkles className="w-5 h-5" />
             </div>
             <div>
-              <h3 className="text-lg font-bold text-white">AI Resume Redesign Studio</h3>
+              <h3 className="text-base sm:text-lg font-bold text-white">AI Resume Redesign Studio</h3>
               <p className="text-xs text-gray-400">
                 Rewrites existing bullet points using Google's X-Y-Z formula without inventing fake credentials.
               </p>
             </div>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
             <input
               type="text"
               value={targetRole}
               onChange={(e) => setTargetRole(e.target.value)}
               placeholder="Target Role (e.g. Backend Lead)"
-              className="px-3.5 py-1.5 rounded-xl bg-gray-900 border border-gray-700 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 w-48"
+              className="px-3.5 py-2 rounded-xl bg-gray-900 border border-gray-700 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 w-full sm:w-48 min-h-[40px]"
             />
             <button
               onClick={handleGenerateRewrite}
               disabled={loadingRewrite}
-              className="px-4 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs shadow-md shadow-blue-500/20 flex items-center gap-1.5 transition-all disabled:opacity-50"
+              className="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs shadow-md shadow-blue-500/20 flex items-center justify-center gap-1.5 transition-all disabled:opacity-50 min-h-[40px]"
             >
               {loadingRewrite ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <RefreshCw className="w-3.5 h-3.5" />}
               <span>{rewrittenMarkdown ? 'Regenerate' : 'Optimize Resume'}</span>
@@ -155,7 +155,7 @@ export default function ResumeStudioView({ profile }) {
                     : 'border-gray-800 bg-gray-900/60 text-gray-400 hover:border-gray-700 hover:text-gray-200'
                 }`}
               >
-                <span className="text-xs font-bold block">{tpl.name}</span>
+                <span className="text-xs font-bold block truncate">{tpl.name}</span>
                 <span className="text-[10px] text-gray-400 line-clamp-1 mt-0.5">{tpl.desc}</span>
               </button>
             ))}
@@ -167,11 +167,11 @@ export default function ResumeStudioView({ profile }) {
       {rewrittenMarkdown ? (
         <div className="space-y-4">
           {/* Action Bar */}
-          <div className="flex flex-wrap items-center justify-between gap-3 p-3 rounded-xl bg-gray-900/90 border border-gray-800">
-            <div className="flex items-center gap-1.5 bg-gray-950 p-1 rounded-lg border border-gray-800">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 p-3 rounded-xl bg-gray-900/90 border border-gray-800">
+            <div className="flex items-center gap-1 bg-gray-950 p-1 rounded-lg border border-gray-800 overflow-x-auto">
               <button
                 onClick={() => setViewMode('split')}
-                className={`px-3 py-1 rounded-md text-xs font-semibold flex items-center gap-1.5 transition-colors ${
+                className={`px-3 py-1.5 rounded-md text-xs font-semibold flex items-center gap-1.5 transition-colors whitespace-nowrap min-h-[36px] ${
                   viewMode === 'split' ? 'bg-blue-600 text-white' : 'text-gray-400 hover:text-white'
                 }`}
               >
@@ -180,7 +180,7 @@ export default function ResumeStudioView({ profile }) {
               </button>
               <button
                 onClick={() => setViewMode('editor')}
-                className={`px-3 py-1 rounded-md text-xs font-semibold flex items-center gap-1.5 transition-colors ${
+                className={`px-3 py-1.5 rounded-md text-xs font-semibold flex items-center gap-1.5 transition-colors whitespace-nowrap min-h-[36px] ${
                   viewMode === 'editor' ? 'bg-blue-600 text-white' : 'text-gray-400 hover:text-white'
                 }`}
               >
@@ -189,7 +189,7 @@ export default function ResumeStudioView({ profile }) {
               </button>
               <button
                 onClick={() => setViewMode('preview')}
-                className={`px-3 py-1 rounded-md text-xs font-semibold flex items-center gap-1.5 transition-colors ${
+                className={`px-3 py-1.5 rounded-md text-xs font-semibold flex items-center gap-1.5 transition-colors whitespace-nowrap min-h-[36px] ${
                   viewMode === 'preview' ? 'bg-blue-600 text-white' : 'text-gray-400 hover:text-white'
                 }`}
               >
@@ -198,28 +198,28 @@ export default function ResumeStudioView({ profile }) {
               </button>
             </div>
 
-            <div className="flex items-center gap-2">
+            <div className="flex flex-wrap items-center gap-2">
               <button
                 onClick={handleCopy}
-                className="px-3 py-1.5 rounded-lg border border-gray-700 bg-gray-800 hover:bg-gray-700 text-xs text-gray-200 flex items-center gap-1.5 transition-colors"
+                className="flex-1 sm:flex-initial px-3 py-2 rounded-lg border border-gray-700 bg-gray-800 hover:bg-gray-700 text-xs text-gray-200 flex items-center justify-center gap-1.5 transition-colors min-h-[36px]"
               >
                 {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
-                <span>{copied ? 'Copied' : 'Copy Text'}</span>
+                <span>{copied ? 'Copied' : 'Copy'}</span>
               </button>
 
               <button
                 onClick={handleDownloadDocx}
                 disabled={downloadingDocx}
-                className="px-3 py-1.5 rounded-lg border border-gray-700 bg-gray-800 hover:bg-gray-700 text-xs text-gray-200 flex items-center gap-1.5 transition-colors"
+                className="flex-1 sm:flex-initial px-3 py-2 rounded-lg border border-gray-700 bg-gray-800 hover:bg-gray-700 text-xs text-gray-200 flex items-center justify-center gap-1.5 transition-colors min-h-[36px]"
               >
                 {downloadingDocx ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Download className="w-3.5 h-3.5 text-blue-400" />}
-                <span>Export DOCX</span>
+                <span>DOCX</span>
               </button>
 
               <button
                 onClick={handleDownloadPdf}
                 disabled={downloadingPdf}
-                className="px-3.5 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold flex items-center gap-1.5 shadow-md shadow-emerald-600/20 transition-all"
+                className="w-full sm:w-auto px-3.5 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold flex items-center justify-center gap-1.5 shadow-md shadow-emerald-600/20 transition-all min-h-[36px]"
               >
                 {downloadingPdf ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Download className="w-3.5 h-3.5" />}
                 <span>Download PDF</span>
@@ -231,59 +231,59 @@ export default function ResumeStudioView({ profile }) {
           {viewMode === 'split' && (
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
               {/* Left: Original Resume */}
-              <div className="p-5 rounded-2xl bg-[#0f172a] border border-gray-800 flex flex-col">
+              <div className="p-4 sm:p-5 rounded-2xl bg-[#0f172a] border border-gray-800 flex flex-col">
                 <div className="flex items-center justify-between pb-3 mb-3 border-b border-gray-800">
                   <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">Original Uploaded Text</span>
                   <span className="text-[10px] text-gray-500 font-mono">Source Resume</span>
                 </div>
-                <div className="flex-1 bg-gray-950 p-4 rounded-xl border border-gray-800/80 font-mono text-xs text-gray-400 whitespace-pre-wrap overflow-y-auto max-h-[550px]">
+                <div className="flex-1 bg-gray-950 p-3 sm:p-4 rounded-xl border border-gray-800/80 font-mono text-xs text-gray-400 whitespace-pre-wrap overflow-y-auto max-h-[450px] sm:max-h-[550px] break-words">
                   {profile?.resume_text || 'No resume uploaded.'}
                 </div>
               </div>
 
               {/* Right: Redesigned Editable Resume */}
-              <div className="p-5 rounded-2xl bg-[#0f172a] border border-gray-800 flex flex-col">
+              <div className="p-4 sm:p-5 rounded-2xl bg-[#0f172a] border border-gray-800 flex flex-col">
                 <div className="flex items-center justify-between pb-3 mb-3 border-b border-gray-800">
                   <div className="flex items-center gap-2">
                     <span className="text-xs font-bold text-emerald-400 uppercase tracking-wider">Optimized & Redesigned</span>
-                    <span className="text-[10px] font-semibold text-blue-400 bg-blue-500/10 px-2 py-0.5 rounded-full border border-blue-500/20">
+                    <span className="text-[10px] font-semibold text-blue-400 bg-blue-500/10 px-2 py-0.5 rounded-full border border-blue-500/20 truncate max-w-[120px]">
                       {selectedTemplate}
                     </span>
                   </div>
-                  <span className="text-[10px] text-gray-400">Click to edit directly</span>
+                  <span className="text-[10px] text-gray-400">Click to edit</span>
                 </div>
                 <textarea
                   value={rewrittenMarkdown}
                   onChange={(e) => setRewrittenMarkdown(e.target.value)}
-                  rows={22}
-                  className="w-full flex-1 bg-gray-950 p-4 rounded-xl border border-gray-800 text-xs text-gray-200 font-mono focus:outline-none focus:border-blue-500 leading-relaxed resize-none"
+                  rows={20}
+                  className="w-full flex-1 bg-gray-950 p-3 sm:p-4 rounded-xl border border-gray-800 text-xs text-gray-200 font-mono focus:outline-none focus:border-blue-500 leading-relaxed resize-none break-words"
                 />
               </div>
             </div>
           )}
 
           {viewMode === 'editor' && (
-            <div className="p-5 rounded-2xl bg-[#0f172a] border border-gray-800">
+            <div className="p-4 sm:p-5 rounded-2xl bg-[#0f172a] border border-gray-800">
               <span className="text-xs font-bold text-gray-300 block mb-2">Markdown Content Editor</span>
               <textarea
                 value={rewrittenMarkdown}
                 onChange={(e) => setRewrittenMarkdown(e.target.value)}
-                rows={24}
-                className="w-full bg-gray-950 p-4 rounded-xl border border-gray-800 text-xs text-gray-200 font-mono focus:outline-none focus:border-blue-500 leading-relaxed"
+                rows={22}
+                className="w-full bg-gray-950 p-3 sm:p-4 rounded-xl border border-gray-800 text-xs text-gray-200 font-mono focus:outline-none focus:border-blue-500 leading-relaxed break-words"
               />
             </div>
           )}
 
           {viewMode === 'preview' && (
-            <div className="max-w-3xl mx-auto p-8 rounded-2xl bg-white text-gray-900 shadow-2xl font-sans text-xs leading-relaxed space-y-4">
-              <div className="whitespace-pre-wrap font-sans text-gray-800">
+            <div className="max-w-3xl mx-auto p-4 sm:p-8 rounded-2xl bg-white text-gray-900 shadow-2xl font-sans text-xs leading-relaxed space-y-4 overflow-x-auto break-words">
+              <div className="whitespace-pre-wrap font-sans text-gray-800 break-words">
                 {rewrittenMarkdown}
               </div>
             </div>
           )}
         </div>
       ) : (
-        <div className="p-12 text-center rounded-2xl bg-[#0f172a] border border-dashed border-gray-800">
+        <div className="p-8 sm:p-12 text-center rounded-2xl bg-[#0f172a] border border-dashed border-gray-800">
           <FileText className="w-10 h-10 text-gray-500 mx-auto mb-3" />
           <h4 className="text-sm font-bold text-white">Resume Studio Ready</h4>
           <p className="text-xs text-gray-400 max-w-md mx-auto mt-1 mb-4">
@@ -292,7 +292,7 @@ export default function ResumeStudioView({ profile }) {
           <button
             onClick={handleGenerateRewrite}
             disabled={loadingRewrite}
-            className="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs shadow-md shadow-blue-500/20 inline-flex items-center gap-2"
+            className="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs shadow-md shadow-blue-500/20 inline-flex items-center gap-2 min-h-[44px]"
           >
             {loadingRewrite ? <Loader2 className="w-4 h-4 animate-spin" /> : <Sparkles className="w-4 h-4" />}
             <span>Optimize for {targetRole}</span>
@@ -302,4 +302,3 @@ export default function ResumeStudioView({ profile }) {
     </div>
   );
 }
-

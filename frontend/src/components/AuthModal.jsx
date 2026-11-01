@@ -45,20 +45,21 @@ export default function AuthModal({ isOpen, initialMode = 'login', initialRole =
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-in fade-in duration-200">
-      <div className="w-full max-w-md bg-[#0f172a] border border-gray-800 rounded-2xl shadow-2xl p-6 sm:p-8 relative">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
+      <div className="w-full max-w-md bg-[#0f172a] border border-gray-800 rounded-3xl shadow-2xl p-5 sm:p-7 relative max-h-[92vh] overflow-y-auto">
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 text-gray-400 hover:text-white p-1 rounded-lg hover:bg-gray-800 transition-colors"
+          className="absolute top-4 right-4 text-gray-400 hover:text-white p-2 rounded-xl hover:bg-gray-800 transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
+          aria-label="Close dialog"
         >
           <X className="w-5 h-5" />
         </button>
 
-        <div className="flex items-center gap-2 mb-6">
-          <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center text-white">
+        <div className="flex items-center gap-2.5 mb-5 pr-8">
+          <div className="w-8 h-8 rounded-xl bg-blue-600 flex items-center justify-center text-white flex-shrink-0">
             <Sparkles className="w-4 h-4" />
           </div>
-          <span className="font-extrabold text-lg text-white">
+          <span className="font-extrabold text-base sm:text-lg text-white">
             {isRegister ? 'Create Account' : 'Welcome Back'}
           </span>
         </div>
@@ -66,58 +67,58 @@ export default function AuthModal({ isOpen, initialMode = 'login', initialRole =
         {error && (
           <div className="mb-4 p-3 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-xs flex items-center gap-2">
             <AlertCircle className="w-4 h-4 flex-shrink-0" />
-            <span>{error}</span>
+            <span className="break-words">{error}</span>
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-3.5">
           {isRegister && (
             <div>
-              <label className="block text-xs font-semibold text-gray-300 mb-1.5">Full Name</label>
+              <label className="block text-xs font-semibold text-gray-300 mb-1">Full Name</label>
               <input
                 type="text"
                 required
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="Jane Doe"
-                className="w-full px-3.5 py-2.5 rounded-xl bg-gray-900 border border-gray-700 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 transition-colors"
+                className="w-full px-3.5 py-2.5 rounded-xl bg-gray-900 border border-gray-700 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 transition-colors min-h-[44px]"
               />
             </div>
           )}
 
           <div>
-            <label className="block text-xs font-semibold text-gray-300 mb-1.5">Work or Personal Email</label>
+            <label className="block text-xs font-semibold text-gray-300 mb-1">Email Address</label>
             <input
               type="email"
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="jane@example.com"
-              className="w-full px-3.5 py-2.5 rounded-xl bg-gray-900 border border-gray-700 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 transition-colors"
+              className="w-full px-3.5 py-2.5 rounded-xl bg-gray-900 border border-gray-700 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 transition-colors min-h-[44px]"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-gray-300 mb-1.5">Password</label>
+            <label className="block text-xs font-semibold text-gray-300 mb-1">Password</label>
             <input
               type="password"
               required
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="••••••••"
-              className="w-full px-3.5 py-2.5 rounded-xl bg-gray-900 border border-gray-700 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 transition-colors"
+              className="w-full px-3.5 py-2.5 rounded-xl bg-gray-900 border border-gray-700 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 transition-colors min-h-[44px]"
             />
           </div>
 
           {isRegister && (
             <>
               <div>
-                <label className="block text-xs font-semibold text-gray-300 mb-1.5">Primary Purpose</label>
+                <label className="block text-xs font-semibold text-gray-300 mb-1">Primary Role</label>
                 <div className="grid grid-cols-2 gap-2">
                   <button
                     type="button"
                     onClick={() => setRole('candidate')}
-                    className={`flex items-center justify-center gap-2 py-2 px-3 rounded-xl border text-xs font-semibold transition-all ${
+                    className={`flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl border text-xs font-semibold transition-all min-h-[44px] ${
                       role === 'candidate'
                         ? 'border-blue-500 bg-blue-500/10 text-blue-400'
                         : 'border-gray-800 bg-gray-900 text-gray-400 hover:border-gray-700'
@@ -130,7 +131,7 @@ export default function AuthModal({ isOpen, initialMode = 'login', initialRole =
                   <button
                     type="button"
                     onClick={() => setRole('recruiter')}
-                    className={`flex items-center justify-center gap-2 py-2 px-3 rounded-xl border text-xs font-semibold transition-all ${
+                    className={`flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl border text-xs font-semibold transition-all min-h-[44px] ${
                       role === 'recruiter'
                         ? 'border-indigo-500 bg-indigo-500/10 text-indigo-400'
                         : 'border-gray-800 bg-gray-900 text-gray-400 hover:border-gray-700'
@@ -144,13 +145,13 @@ export default function AuthModal({ isOpen, initialMode = 'login', initialRole =
 
               {role === 'recruiter' && (
                 <div>
-                  <label className="block text-xs font-semibold text-gray-300 mb-1.5">Company / Organization</label>
+                  <label className="block text-xs font-semibold text-gray-300 mb-1">Company / Organization</label>
                   <input
                     type="text"
                     value={organization}
                     onChange={(e) => setOrganization(e.target.value)}
                     placeholder="Acme Recruiting"
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-gray-900 border border-gray-700 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-indigo-500 transition-colors"
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-gray-900 border border-gray-700 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-indigo-500 transition-colors min-h-[44px]"
                   />
                 </div>
               )}
@@ -160,7 +161,7 @@ export default function AuthModal({ isOpen, initialMode = 'login', initialRole =
           <button
             type="submit"
             disabled={loading}
-            className="w-full mt-2 py-2.5 px-4 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-sm shadow-lg shadow-blue-500/20 transition-all flex items-center justify-center gap-2 disabled:opacity-50"
+            className="w-full mt-2 py-3 px-4 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-sm shadow-lg shadow-blue-500/20 transition-all flex items-center justify-center gap-2 disabled:opacity-50 min-h-[44px]"
           >
             {loading ? (
               <>
@@ -173,14 +174,14 @@ export default function AuthModal({ isOpen, initialMode = 'login', initialRole =
           </button>
         </form>
 
-        <div className="mt-6 text-center text-xs text-gray-400">
+        <div className="mt-5 text-center text-xs text-gray-400">
           {isRegister ? (
             <span>
               Already have an account?{' '}
               <button
                 type="button"
                 onClick={() => { setIsRegister(false); setError(''); }}
-                className="text-blue-400 hover:text-blue-300 font-semibold"
+                className="text-blue-400 hover:text-blue-300 font-semibold py-1 px-1.5"
               >
                 Sign In
               </button>
@@ -191,7 +192,7 @@ export default function AuthModal({ isOpen, initialMode = 'login', initialRole =
               <button
                 type="button"
                 onClick={() => { setIsRegister(true); setError(''); }}
-                className="text-blue-400 hover:text-blue-300 font-semibold"
+                className="text-blue-400 hover:text-blue-300 font-semibold py-1 px-1.5"
               >
                 Create one now
               </button>
@@ -202,4 +203,3 @@ export default function AuthModal({ isOpen, initialMode = 'login', initialRole =
     </div>
   );
 }
-
