@@ -113,22 +113,27 @@ class ResilientDatabase:
         self.local_data: Dict[str, List[Dict[str, Any]]] = {}
         self._load_local_db()
 
-        # Check connection
-        if os.environ.get("USE_LOCAL_DB", "").lower() in ("true", "1"):
-            logger.info("USE_LOCAL_DB set. Operating in local storage mode.")
+        # Initialize client non-blockingly
+        if os.environ.get("USE_LOCAL_DB", "").lower() in ("true", "1") or not self.mongo_uri:
+            logger.info("USE_LOCAL_DB set or empty URI. Operating in local storage mode.")
             self.use_local = True
+            self.client = None
+            self.mongo_db = None
         else:
             try:
-                from pymongo import MongoClient
-                client = MongoClient(self.mongo_uri, serverSelectionTimeoutMS=500, connectTimeoutMS=500)
-                client.admin.command("ping")
-                client.close()
-                logger.info("Successfully verified live connection to MongoDB Atlas.")
-                self.client = AsyncIOMotorClient(self.mongo_uri, serverSelectionTimeoutMS=1000)
+                self.client = AsyncIOMotorClient(
+                    self.mongo_uri,
+                    serverSelectionTimeoutMS=2000,
+                    connectTimeoutMS=2000,
+                    socketTimeoutMS=2000
+                )
                 self.mongo_db = self.client[self.db_name]
+                logger.info(f"Initialized AsyncIOMotorClient for database: {self.db_name}")
             except Exception as e:
-                logger.info(f"MongoDB not directly reachable ({e}). Operating in resilient local storage mode.")
+                logger.warning(f"MongoDB client init fallback ({e}). Operating in resilient local storage mode.")
                 self.use_local = True
+                self.client = None
+                self.mongo_db = None
 
         # Collections
         self.users = FallbackCollection(self, "users")

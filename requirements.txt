@@ -1,7 +1,9 @@
 fastapi
-uvicorn
+uvicorn[standard]
+gunicorn
 motor
 pymongo
+dnspython
 scikit-learn
 pandas
 numpy

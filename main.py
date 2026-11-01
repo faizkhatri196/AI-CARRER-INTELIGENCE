@@ -1,16 +1,19 @@
 import os
 import sys
-import importlib.util
 
-current_dir = os.path.dirname(os.path.abspath(__file__))
-backend_dir = os.path.join(current_dir, "backend")
+# Ensure both root and backend are on sys.path
+root_dir = os.path.dirname(os.path.abspath(__file__))
+backend_dir = os.path.join(root_dir, "backend")
+
 if backend_dir not in sys.path:
     sys.path.insert(0, backend_dir)
+if root_dir not in sys.path:
+    sys.path.insert(0, root_dir)
 
-backend_main_path = os.path.join(backend_dir, "main.py")
-spec = importlib.util.spec_from_file_location("backend_app_module", backend_main_path)
-backend_module = importlib.util.module_from_spec(spec)
-sys.modules["backend_app_module"] = backend_module
-spec.loader.exec_module(backend_module)
+# Import app from backend.main
+from backend.main import app
 
-app = backend_module.app
+if __name__ == "__main__":
+    import uvicorn
+    port = int(os.environ.get("PORT", 10000))
+    uvicorn.run(app, host="0.0.0.0", port=port, reload=False)
