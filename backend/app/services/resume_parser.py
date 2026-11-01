@@ -357,3 +357,4 @@ def parse_complete_resume(file_bytes: bytes, filename: str) -> ParsedResume:
         ats_formatting_score=ats_score,
         content_quality_score=quality_score
     )
+

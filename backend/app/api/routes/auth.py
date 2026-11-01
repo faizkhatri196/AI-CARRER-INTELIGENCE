@@ -62,3 +62,4 @@ async def login_user(user: UserLogin):
         role=db_user.get("role", "candidate"),
         organization=db_user.get("organization")
     )
+

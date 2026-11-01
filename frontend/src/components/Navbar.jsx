@@ -104,3 +104,4 @@ export default function Navbar({ user, mode, onModeChange, onLogout, onOpenAuth 
     </header>
   );
 }
+

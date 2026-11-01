@@ -214,3 +214,4 @@ export default function CandidateDetailModal({ candidate, jobId, onClose, onCand
     </div>
   );
 }
+

@@ -119,3 +119,4 @@ class FeatureExtractor:
         return feature_vector
 
 feature_extractor = FeatureExtractor()
+

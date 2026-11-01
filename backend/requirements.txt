@@ -13,7 +13,6 @@ langchain-community
 langchain-groq
 python-multipart
 pydantic
-pydantic-settings
 langchain-text-splitters
 bcrypt
 PyJWT

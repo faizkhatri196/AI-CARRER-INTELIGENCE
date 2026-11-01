@@ -228,3 +228,4 @@ class ChatRequest(BaseModel):
     user_id: str
     job_id: Optional[str] = None
     mode: str = "candidate"  # "candidate" or "recruiter"
+

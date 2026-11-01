@@ -294,3 +294,4 @@ export default function JobOpeningsManager({ jobs, selectedJob, onSelectJob, onR
     </div>
   );
 }
+

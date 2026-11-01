@@ -202,3 +202,4 @@ export default function AuthModal({ isOpen, initialMode = 'login', initialRole =
     </div>
   );
 }
+

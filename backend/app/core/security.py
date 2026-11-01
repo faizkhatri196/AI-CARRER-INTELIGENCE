@@ -30,3 +30,4 @@ def decode_access_token(token: str) -> Optional[Dict[str, Any]]:
         return decoded
     except Exception:
         return None
+

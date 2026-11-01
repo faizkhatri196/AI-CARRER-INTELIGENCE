@@ -146,3 +146,4 @@ async def download_resume_docx(request: DownloadPDFRequest):
         media_type="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
         headers={"Content-Disposition": f'attachment; filename="{filename}"'}
     )
+

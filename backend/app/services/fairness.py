@@ -50,3 +50,4 @@ def run_fairness_audit(candidates: List[Dict[str, Any]]) -> FairnessAuditReport:
         protected_features_used=[], # strictly empty
         audit_passed=True
     )
+

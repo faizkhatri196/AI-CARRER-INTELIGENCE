@@ -133,3 +133,4 @@ export default function CareerChatbotDrawer({ profile }) {
     </div>
   );
 }
+

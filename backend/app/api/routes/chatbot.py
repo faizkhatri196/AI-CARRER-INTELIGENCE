@@ -39,3 +39,4 @@ async def chat_handler(request: ChatRequest):
     })
 
     return {"response": reply}
+

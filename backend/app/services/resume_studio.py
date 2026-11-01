@@ -249,3 +249,4 @@ class ResumeStudioService:
         return buffer.getvalue()
 
 resume_studio = ResumeStudioService()
+

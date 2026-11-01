@@ -109,3 +109,4 @@ class CareerAndRecruiterChatbot:
             )
 
 career_recruiter_chatbot = CareerAndRecruiterChatbot()
+

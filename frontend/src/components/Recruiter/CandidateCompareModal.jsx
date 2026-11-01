@@ -97,3 +97,4 @@ export default function CandidateCompareModal({ candidates, onClose }) {
     </div>
   );
 }
+

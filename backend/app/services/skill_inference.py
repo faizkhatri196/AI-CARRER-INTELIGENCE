@@ -255,3 +255,4 @@ class SkillInferenceEngine:
         return deduped[:8]
 
 skill_engine = SkillInferenceEngine()
+

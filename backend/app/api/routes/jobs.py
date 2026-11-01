@@ -213,3 +213,4 @@ async def extract_job_requirements(request: JobExtractRequest):
         education="Bachelor's Degree in Computer Science or equivalent",
         employment_type="Full-time"
     )
+

@@ -23,3 +23,4 @@ async def analyze_linkedin(request: LinkedInReq):
         request.linkedin_text, resume_text, resume_skills
     )
     return analysis
+

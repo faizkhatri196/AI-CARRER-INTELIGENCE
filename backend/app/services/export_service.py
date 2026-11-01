@@ -116,3 +116,4 @@ class RecruiterExportService:
         return buffer.getvalue()
 
 export_service = RecruiterExportService()
+

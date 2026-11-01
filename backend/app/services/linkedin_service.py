@@ -54,3 +54,4 @@ class LinkedInIntelligenceService:
         }
 
 linkedin_service = LinkedInIntelligenceService()
+

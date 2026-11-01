@@ -9,7 +9,19 @@ logger = logging.getLogger(__name__)
 
 class JobMarketRAGEngine:
     def __init__(self):
-        self.csv_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "ai_job_market.csv"))
+        root_csv = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "ai_job_market.csv"))
+        backend_csv = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "ai_job_market.csv"))
+        data_csv = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "data", "ai_job_market.csv"))
+        
+        if os.path.exists(root_csv):
+            self.csv_path = root_csv
+        elif os.path.exists(backend_csv):
+            self.csv_path = backend_csv
+        elif os.path.exists(data_csv):
+            self.csv_path = data_csv
+        else:
+            self.csv_path = root_csv
+
         self.df = None
         self.vectorizer = None
         self.tfidf_matrix = None

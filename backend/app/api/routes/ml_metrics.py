@@ -10,3 +10,4 @@ async def get_ml_evaluation_report():
     Precision, Recall, F1-Score, ROC-AUC, MAE, R^2, NDCG@5, and Feature Importances.
     """
     return ml_evaluation_service.report or ml_evaluation_service.train_and_evaluate_benchmark()
+

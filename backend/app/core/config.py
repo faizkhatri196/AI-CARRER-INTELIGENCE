@@ -1,8 +1,7 @@
 import os
-from pydantic_settings import BaseSettings
 from typing import List
 
-class Settings(BaseSettings):
+class Settings:
     PROJECT_NAME: str = "AI Career & Recruitment Intelligence"
     VERSION: str = "2.0.0"
     API_PREFIX: str = "/api"
@@ -37,9 +36,5 @@ class Settings(BaseSettings):
     MAX_UPLOAD_SIZE_MB: int = 15
     MAX_BATCH_FILES: int = 250
     CONCURRENT_WORKERS: int = 5
-
-    class Config:
-        env_file = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", ".env"))
-        extra = "allow"
 
 settings = Settings()
