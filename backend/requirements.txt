@@ -7,13 +7,10 @@ pandas
 numpy
 spacy
 PyPDF2
-langchain
 langchain-core
-langchain-community
 langchain-groq
 python-multipart
 pydantic
-langchain-text-splitters
 bcrypt
 PyJWT
 reportlab

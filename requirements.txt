@@ -1,0 +1,17 @@
+fastapi
+uvicorn
+motor
+pymongo
+scikit-learn
+pandas
+numpy
+spacy
+PyPDF2
+langchain-core
+langchain-groq
+python-multipart
+pydantic
+bcrypt
+PyJWT
+reportlab
+python-docx

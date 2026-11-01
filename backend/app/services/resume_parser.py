@@ -20,11 +20,14 @@ logger = logging.getLogger("resume_parser")
 # Load spaCy NLP model
 try:
     nlp = spacy.load("en_core_web_sm")
-except OSError:
-    logger.info("Downloading spaCy en_core_web_sm model...")
-    import spacy.cli
-    spacy.cli.download("en_core_web_sm")
-    nlp = spacy.load("en_core_web_sm")
+except Exception:
+    try:
+        import spacy.cli
+        spacy.cli.download("en_core_web_sm")
+        nlp = spacy.load("en_core_web_sm")
+    except Exception as e:
+        logger.warning(f"Could not load en_core_web_sm, falling back to spacy.blank('en'): {e}")
+        nlp = spacy.blank("en")
 
 STRONG_ACTION_VERBS = {
     "architected", "engineered", "developed", "designed", "implemented", "optimized",

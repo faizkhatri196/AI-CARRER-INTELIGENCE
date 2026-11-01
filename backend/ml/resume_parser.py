@@ -5,11 +5,13 @@ import io
 
 try:
     nlp = spacy.load("en_core_web_sm")
-except OSError:
-    print("Downloading en_core_web_sm model...")
-    import spacy.cli
-    spacy.cli.download("en_core_web_sm")
-    nlp = spacy.load("en_core_web_sm")
+except Exception:
+    try:
+        import spacy.cli
+        spacy.cli.download("en_core_web_sm")
+        nlp = spacy.load("en_core_web_sm")
+    except Exception:
+        nlp = spacy.blank("en")
 
 def extract_text_from_pdf(file_bytes: bytes) -> str:
     pdf_reader = PyPDF2.PdfReader(io.BytesIO(file_bytes))
