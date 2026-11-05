@@ -109,6 +109,16 @@ async def legacy_get_profile(user_id: str):
 async def legacy_roadmap_update(request: candidates.DynamicRoadmapRequest):
     return await candidates.generate_personalized_roadmap(request)
 
+@app.on_event("shutdown")
+async def shutdown_event():
+    logger.info("Executing graceful shutdown: closing database clients and active connections...")
+    if hasattr(db, "client") and db.client:
+        try:
+            db.client.close()
+            logger.info("Database client closed cleanly.")
+        except Exception as e:
+            logger.warning(f"Error during database client shutdown: {e}")
+
 if __name__ == "__main__":
     import uvicorn
     port = int(os.environ.get("PORT", 10000))
