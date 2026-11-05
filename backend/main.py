@@ -19,6 +19,7 @@ from fastapi.middleware.cors import CORSMiddleware
 import logging
 
 from app.core.config import settings
+from app.core.diagnostics import get_system_diagnostics
 from app.database.connection import db
 from app.api.routes import (
     auth, jobs, screening, candidates,
@@ -90,6 +91,10 @@ async def readiness_check():
             "database_error": str(e),
             "use_local": True
         }
+
+@app.get("/api/system/diagnostics")
+def system_diagnostics():
+    return get_system_diagnostics(db)
 
 # Backwards-compatibility aliases for existing endpoints
 @app.post("/api/upload")
