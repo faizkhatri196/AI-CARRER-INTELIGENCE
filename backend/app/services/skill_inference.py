@@ -167,9 +167,20 @@ TRANSFERABLE_MAP = {
 class SkillInferenceEngine:
     def __init__(self):
         self.all_keywords = set()
+        self.compiled_explicit_patterns = []
         for cat, skills in SKILL_TAXONOMY.items():
             for s in skills:
-                self.all_keywords.add(s.lower())
+                s_lower = s.lower()
+                self.all_keywords.add(s_lower)
+                # Pre-compile boundary-checked regex
+                pattern = re.compile(r'(?<![a-zA-Z0-9_-])' + re.escape(s_lower) + r'(?![a-zA-Z0-9_-])')
+                self.compiled_explicit_patterns.append((s_lower, pattern))
+
+        # Pre-compile inferred capability rules
+        self.compiled_inference_rules = [
+            (re.compile(rule[0], re.IGNORECASE), rule[1], rule[2], rule[3])
+            for rule in INFERRED_CAPABILITY_RULES
+        ]
 
     def normalize_skill(self, skill: str) -> str:
         s_clean = skill.strip().lower()
@@ -179,13 +190,12 @@ class SkillInferenceEngine:
         return skill.strip().title()
 
     def extract_explicit_skills(self, text: str) -> List[str]:
-        """Extracts skills explicitly mentioned in the text using word boundaries."""
+        """Extracts skills explicitly mentioned in the text using pre-compiled word boundaries."""
         text_lower = text.lower()
         found_skills = set()
-        for skill in self.all_keywords:
-            pattern = r'(?<![a-zA-Z0-9_-])' + re.escape(skill) + r'(?![a-zA-Z0-9_-])'
-            if re.search(pattern, text_lower):
-                found_skills.add(self.normalize_skill(skill))
+        for s_lower, pattern in self.compiled_explicit_patterns:
+            if pattern.search(text_lower):
+                found_skills.add(self.normalize_skill(s_lower))
         return sorted(list(found_skills))
 
     def infer_hidden_capabilities(self, sentences_or_bullets: List[str]) -> List[SkillProvenance]:
@@ -200,8 +210,8 @@ class SkillInferenceEngine:
             if not text or len(text.strip()) < 10:
                 continue
             text_clean = text.strip()
-            for pattern, capability, category, conf in INFERRED_CAPABILITY_RULES:
-                if capability not in seen_skills and re.search(pattern, text_clean, re.IGNORECASE):
+            for pattern, capability, category, conf in self.compiled_inference_rules:
+                if capability not in seen_skills and pattern.search(text_clean):
                     seen_skills.add(capability)
                     inferred.append(SkillProvenance(
                         skill=capability,
