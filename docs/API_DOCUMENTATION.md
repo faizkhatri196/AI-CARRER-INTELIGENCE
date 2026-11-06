@@ -166,3 +166,4 @@ Production health check returning status 200:
 
 ### `GET /ready`
 Readiness probe verifying database connectivity and collection access.
+

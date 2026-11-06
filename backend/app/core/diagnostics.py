@@ -33,3 +33,4 @@ def get_system_diagnostics(db_instance: Any = None) -> Dict[str, Any]:
             "max_batch_upload": 250
         }
     }
+

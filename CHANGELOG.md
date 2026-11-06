@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.1.1] - 2026-11-06
+
+### Resiliency & Reliability
+- Added resilient deterministic offline fallback mechanisms in `CareerAIEngine` (`backend/ml/rag_engine.py`) for resume analysis, ATS optimization suggestions, Google X-Y-Z resume rewriting, and career guidance, ensuring 100% zero-downtime execution even without external LLM API keys.
+
+---
+
 ## [2.1.0] - 2026-11-05
 
 ### Added
@@ -39,3 +46,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **AI Resume Redesign Studio**: 6 ATS-optimized design templates, Google X-Y-Z formula bullet-point rewriting, and ReportLab PDF export.
 - **20-Feature ML Benchmark**: Random Forest classification & regression models with verified evaluation metrics (Precision, Recall, ROC-AUC, NDCG@5).
 - **Responsive Design Across 15 Viewports**: Touch-friendly mobile navigation drawer, responsive candidate cards, and fluid layouts from 320px to 2560px.
+

@@ -34,3 +34,4 @@ test('Scoring Weights Dimension Verification (100% Total)', () => {
   const total = Object.values(defaultWeights).reduce((a, b) => a + b, 0);
   assert.equal(total, 100);
 });
+

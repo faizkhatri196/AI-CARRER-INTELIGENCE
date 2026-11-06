@@ -19,3 +19,4 @@ AI Career & Recruitment Intelligence 2.0 is engineered in compliance with EEOC, 
 
 ## 3. Reporting a Vulnerability
 We welcome responsible security disclosures. If you discover a vulnerability or security flaw, please report it directly via GitHub issues or email `security@career-intelligence.ai`. We commit to acknowledging reports within 48 hours and deploying remediations expeditiously.
+

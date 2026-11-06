@@ -75,3 +75,4 @@ Every candidate is evaluated across an 8-dimensional weighted scoring framework:
 The platform uses dual-mode database failover:
 1. **Primary**: Asynchronous connection to MongoDB Atlas with non-blocking connection pool.
 2. **Fallback**: If network connectivity is interrupted, the system automatically writes to and reads from local transactional storage (`local_db.json`) without throwing 500 errors to end users.
+

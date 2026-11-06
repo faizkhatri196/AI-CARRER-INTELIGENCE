@@ -50,3 +50,4 @@ The frontend is built using Vite and React.
 - **Deploy fails with exit status 127**: Verify `gunicorn` and `uvicorn[standard]` are present in `requirements.txt`.
 - **MongoDB +srv resolution failure**: Ensure `dnspython` is installed in the Python environment.
 - **Worker Timeout**: Keep module-level synchronous network calls out of imports; use `AsyncIOMotorClient` with `serverSelectionTimeoutMS=2000`.
+
