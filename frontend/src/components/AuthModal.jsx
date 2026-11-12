@@ -18,30 +18,57 @@ export default function AuthModal({ isOpen, initialMode = 'login', initialRole =
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+    
+    const cleanEmail = (email || '').trim().toLowerCase();
+    const cleanPassword = (password || '').trim();
+    const cleanName = (name || '').trim();
+
+    if (!cleanEmail || !cleanPassword) {
+      setError('Please fill in both email and password.');
+      return;
+    }
+
     setLoading(true);
 
     try {
       if (isRegister) {
         const payload = {
-          name,
-          email,
-          password,
+          name: cleanName || 'User',
+          email: cleanEmail,
+          password: cleanPassword,
           role,
-          organization: organization || (role === 'recruiter' ? 'Acme Corp' : 'Personal')
+          organization: (organization || '').trim() || (role === 'recruiter' ? 'Acme Corp' : 'Personal')
         };
-        const res = await axios.post(getApiUrl('/api/auth/register'), payload);
+        const res = await axios.post(getApiUrl('/api/auth/register'), payload, { timeout: 45000 });
         onSuccess(res.data);
       } else {
-        const payload = { email, password };
-        const res = await axios.post(getApiUrl('/api/auth/login'), payload);
+        const payload = { email: cleanEmail, password: cleanPassword };
+        const res = await axios.post(getApiUrl('/api/auth/login'), payload, { timeout: 45000 });
         onSuccess(res.data);
       }
       onClose();
     } catch (err) {
-      setError(err.response?.data?.detail || 'Authentication failed. Please check your credentials.');
+      if (err.code === 'ECONNABORTED' || err.message?.includes('timeout') || err.message === 'Network Error') {
+        setError('Cloud server is waking up or network is slow. Please retry in a moment, or click Quick Demo Access below.');
+      } else {
+        setError(err.response?.data?.detail || 'Authentication failed. Please verify your email and password.');
+      }
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleDemoAccess = (demoRole) => {
+    const demoUser = {
+      user_id: `demo_${demoRole}_${Date.now().toString(36)}`,
+      name: demoRole === 'recruiter' ? 'Lead Recruiter (Demo)' : 'Alex Mercer (Demo)',
+      email: demoRole === 'recruiter' ? 'recruiter@demo.ai' : 'candidate@demo.ai',
+      role: demoRole,
+      organization: demoRole === 'recruiter' ? 'Global Talent Tech' : 'Independent',
+      token: 'demo_session_token_career_intelligence_2026'
+    };
+    onSuccess(demoUser);
+    onClose();
   };
 
   return (
@@ -198,6 +225,30 @@ export default function AuthModal({ isOpen, initialMode = 'login', initialRole =
               </button>
             </span>
           )}
+        </div>
+
+        <div className="mt-5 pt-4 border-t border-gray-800">
+          <p className="text-center text-[11px] uppercase tracking-wider font-semibold text-gray-500 mb-2.5">
+            Or Instant Demo Exploration
+          </p>
+          <div className="grid grid-cols-2 gap-2">
+            <button
+              type="button"
+              onClick={() => handleDemoAccess('candidate')}
+              className="py-2 px-2.5 rounded-xl border border-gray-700 bg-gray-900/80 hover:bg-gray-800 text-gray-300 hover:text-white text-xs font-medium transition-all text-center flex items-center justify-center gap-1.5 min-h-[40px]"
+            >
+              <UserCheck className="w-3.5 h-3.5 text-blue-400" />
+              <span>Candidate Demo</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => handleDemoAccess('recruiter')}
+              className="py-2 px-2.5 rounded-xl border border-gray-700 bg-gray-900/80 hover:bg-gray-800 text-gray-300 hover:text-white text-xs font-medium transition-all text-center flex items-center justify-center gap-1.5 min-h-[40px]"
+            >
+              <Briefcase className="w-3.5 h-3.5 text-indigo-400" />
+              <span>Recruiter Demo</span>
+            </button>
+          </div>
         </div>
       </div>
     </div>

@@ -1,4 +1,5 @@
 const DEFAULT_DEV_BACKEND_URL = 'http://localhost:8000';
+export const DEFAULT_PROD_BACKEND_URL = 'https://ai-carrer-inteligence-1.onrender.com';
 
 export function getApiBaseUrl(env = import.meta?.env || {}, windowObject = typeof window !== 'undefined' ? window : undefined) {
   const configuredUrl = env?.VITE_API_URL || env?.VITE_BACKEND_URL || env?.BACKEND_URL;
@@ -11,7 +12,8 @@ export function getApiBaseUrl(env = import.meta?.env || {}, windowObject = typeo
     if (hostname === 'localhost' || hostname === '127.0.0.1' || hostname === '[::1]') {
       return DEFAULT_DEV_BACKEND_URL;
     }
-    return windowObject.location.origin;
+    // Remote/Vercel production fallback directly to the live Render backend
+    return DEFAULT_PROD_BACKEND_URL;
   }
 
   return DEFAULT_DEV_BACKEND_URL;

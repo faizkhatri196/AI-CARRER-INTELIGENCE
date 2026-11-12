@@ -13,9 +13,13 @@ export default function Login({ onLogin }) {
     e.preventDefault();
     setError('');
     
+    const cleanEmail = (formData.email || '').trim().toLowerCase();
+    const cleanPassword = (formData.password || '').trim();
+    const cleanName = (formData.name || '').trim();
+
     // Strict email format validation
     const emailRegex = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/;
-    if (!emailRegex.test(formData.email)) {
+    if (!emailRegex.test(cleanEmail)) {
       setError('Please enter a valid email address (e.g. name@domain.com).');
       return;
     }
@@ -23,11 +27,17 @@ export default function Login({ onLogin }) {
     setLoading(true);
     try {
       const endpoint = isRegister ? '/api/auth/register' : '/api/auth/login';
-      const payload = isRegister ? formData : { email: formData.email, password: formData.password };
-      const response = await axios.post(getApiUrl(endpoint), payload);
+      const payload = isRegister 
+        ? { name: cleanName || 'User', email: cleanEmail, password: cleanPassword, role: 'candidate' }
+        : { email: cleanEmail, password: cleanPassword };
+      const response = await axios.post(getApiUrl(endpoint), payload, { timeout: 45000 });
       onLogin(response.data);
     } catch (err) {
-      setError(err.response?.data?.detail || 'An error occurred during authentication.');
+      if (err.code === 'ECONNABORTED' || err.message?.includes('timeout') || err.message === 'Network Error') {
+        setError('Cloud server is waking up or network is slow. Please retry in a few seconds.');
+      } else {
+        setError(err.response?.data?.detail || 'Authentication failed. Please check your credentials.');
+      }
     } finally {
       setLoading(false);
     }

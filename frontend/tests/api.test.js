@@ -12,7 +12,7 @@ test('uses localhost backend for local development', () => {
   assert.equal(base, 'http://localhost:8000');
 });
 
-test('uses current origin when deployed and no API URL is configured', () => {
-  const base = getApiBaseUrl({}, { location: { origin: 'https://app.example.com', hostname: 'app.example.com' } });
-  assert.equal(base, 'https://app.example.com');
+test('uses production Render backend when deployed and no API URL is configured', () => {
+  const base = getApiBaseUrl({}, { location: { origin: 'https://ai-carrer-inteligence.vercel.app', hostname: 'ai-carrer-inteligence.vercel.app' } });
+  assert.equal(base, 'https://ai-carrer-inteligence-1.onrender.com');
 });

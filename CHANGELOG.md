@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.1.2] - 2026-11-12
+
+### Fixed
+- **Permanent Production Authentication Fix**: Configured default production backend routing in `frontend/src/utils/api.js` to automatically target `https://ai-carrer-inteligence-1.onrender.com` when running on remote domains like Vercel, preventing 404 routing errors on `/api/auth/login` and `/api/auth/register`.
+- Added `frontend/.env.production` and `frontend/vercel.json` API rewrites for fail-safe server-side proxying.
+- Enhanced `AuthModal.jsx` and `Login.jsx` with input whitespace sanitization, extended 45-second network timeout for cold-starting cloud instances, and user-friendly error messages.
+- Added 1-click Quick Demo Access (Candidate & Recruiter) in `AuthModal.jsx` for instant zero-latency workspace exploration.
+- Resolved CORS origins in `backend/main.py` with `allow_origin_regex` to support all Vercel domains and preview deployments.
+
+---
+
 ## [2.1.1] - 2026-11-06
 
 ### Resiliency & Reliability
